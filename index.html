@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SitusKilat AI Pro - AI Website Builder</title>
+    <title>SitusKilat AI Pro - AI Website Builder & DNS Gateway</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,9 +11,11 @@
     <!-- React & ReactDOM CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Babel Standalone CDN -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Google Fonts: Poppins -->
+    <!-- Google Fonts: Poppins (Panduan S-Tools ID) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -23,11 +25,8 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
                     animation: {
-                        fadeIn: 'fadeIn 0.25s ease-out forwards',
+                        fadeIn: 'fadeIn 0.2s ease-out forwards',
                         scaleIn: 'scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
                         slideUp: 'slideUp 0.3s ease-out forwards',
                     },
@@ -50,12 +49,11 @@
         }
     </script>
 
-    <!-- Custom Styles -->
+    <!-- Custom Style Overrides & S-Tools ID Guidelines -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             color: #1F2937;
-            background-color: #F9FAFB; /* gray-50 */
         }
         
         .text-gradient {
@@ -68,49 +66,55 @@
 
         .reveal {
             opacity: 0;
-            transform: translateY(15px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transform: translateY(20px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Custom Scrollbar */
+        .section-bg-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .section-bg-glow::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.08) 0%, rgba(59, 130, 246, 0.03) 40%, transparent 70%);
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .section-bg-glow.glow-active::after {
+            opacity: 1;
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-        
-        .dark-scrollbar::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        .dark-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155;
-        }
-        .dark-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="overflow-hidden h-screen w-full">
+<body class="bg-gray-50 text-gray-800 overflow-hidden h-screen w-full">
     
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        const CLOUDFLARE_WORKER_URL = "https://situskilat-auth-bridge.username.workers.dev";
+        // ==========================================
+        // 🛡️ URL CLOUDFLARE WORKER ANDA
+        // ==========================================
+        const DEFAULT_WORKER_URL = "https://web-builder-stools.senrima-ms.workers.dev"; 
 
         const TEMPLATES = {
             saas: `<!DOCTYPE html>
@@ -118,27 +122,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaSaaS - Masa Depan Kerja Tim</title>
+    <title>LuminaSaaS - Solusi Masa Kini</title>
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
-<body class="bg-white text-gray-900 min-h-screen">
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 py-4 px-6">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
-            <span class="text-xl font-extrabold text-indigo-600">LuminaSaaS</span>
-            <nav class="hidden md:flex gap-6 text-sm font-semibold text-gray-500">
-                <a href="#" class="hover:text-indigo-600">Fitur</a>
-                <a href="#" class="hover:text-indigo-600">Harga</a>
-            </nav>
-            <button class="bg-gray-900 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-gray-800 transition">Mulai Gratis</button>
-        </div>
-    </header>
-    <section class="py-24 px-6 text-center max-w-4xl mx-auto">
-        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-gray-900">Sinkronisasi Tim <span class="text-indigo-600">Tanpa Batas</span></h1>
-        <p class="text-lg text-gray-500 mb-10">Tingkatkan produktivitas perusahaan dengan platform kolaborasi dan analitik paling intuitif di dunia.</p>
-        <button class="bg-indigo-600 text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-indigo-600/30 hover:scale-105 transition transform">Jadwalkan Demo</button>
-    </section>
+<body class="bg-slate-50 min-h-screen p-10 text-center flex flex-col items-center justify-center">
+    <h1 class="text-4xl font-extrabold text-slate-900 mb-4">LuminaSaaS Beraksi</h1>
+    <p class="text-slate-500 max-w-md mx-auto">Platform masa depan yang menunjang kolaborasi tanpa batas.</p>
 </body>
 </html>`,
             coffee: `<!DOCTYPE html>
@@ -146,58 +135,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kopi Wangi - Seduhan Estetik</title>
+    <title>Kopi Wangi</title>
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
-    <style>h1, h2 { font-family: 'Playfair Display', serif; } body { font-family: 'Poppins', sans-serif; }</style>
 </head>
-<body class="bg-stone-50 text-stone-800">
-    <nav class="p-6 max-w-5xl mx-auto flex justify-between items-center">
-        <span class="text-2xl font-extrabold text-stone-900 tracking-widest">KOPI WANGI</span>
-        <button class="border border-stone-800 text-stone-800 px-6 py-2 text-sm font-bold uppercase tracking-widest hover:bg-stone-800 hover:text-white transition">Menu</button>
-    </nav>
-    <section class="py-20 px-6 text-center">
-        <h1 class="text-5xl md:text-7xl font-extrabold mb-6 text-stone-900">Ketenangan di Setiap<br><span class="italic font-light text-stone-500">Tetesan Seduhan</span></h1>
-        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80" class="mx-auto rounded-2xl shadow-2xl mt-12 w-full max-w-3xl object-cover h-[400px]">
-    </section>
+<body class="bg-amber-50 min-h-screen p-10 text-center flex flex-col items-center justify-center">
+    <h1 class="text-4xl font-extrabold text-amber-900 mb-4">Kopi Wangi Estetik</h1>
+    <p class="text-amber-800 max-w-md mx-auto">Sensasi aroma kopi nusantara sejak 1998.</p>
 </body>
 </html>`
         };
 
         function App() {
-            // State Inti Layout & Mode
-            const [viewMode, setViewMode] = useState('editor'); // 'editor' | 'browser'
-            const [editorTab, setEditorTab] = useState('preview'); // 'preview' | 'code' -> Mengatur tampilan di panel kanan
-            const [previewMode, setPreviewMode] = useState('desktop'); // 'desktop' | 'tablet' | 'mobile'
-            
-            // State Builder Utama
+            const [activeTab, setActiveTab] = useState('preview');
+            const [viewMode, setViewMode] = useState('editor');
+            const [previewMode, setPreviewMode] = useState('desktop');
+            const [sidebarOpen, setSidebarOpen] = useState(true);
+            const [showCodeView, setShowCodeView] = useState(true);
+            const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+            const [showSettingsModal, setShowSettingsModal] = useState(false);
+
             const [prompt, setPrompt] = useState('');
             const [generatedCode, setGeneratedCode] = useState(TEMPLATES.saas);
             const [isLoading, setIsLoading] = useState(false);
 
-            // State Keamanan Server
-            const [workerUrl, setWorkerUrl] = useState(() => localStorage.getItem('situs_kilat_worker_url') || CLOUDFLARE_WORKER_URL);
+            // Worker State - Prioritaskan default yang baru dihardcode
+            const [workerUrl, setWorkerUrl] = useState(() => {
+                let saved = localStorage.getItem('situs_kilat_worker_url');
+                // Paksa menggunakan default jika yang tersimpan masih berupa placeholder sebelumnya
+                if (!saved || saved.includes('nama-anda') || saved.includes('username')) {
+                    saved = DEFAULT_WORKER_URL;
+                }
+                if (saved.endsWith('/')) saved = saved.slice(0, -1);
+                return saved;
+            });
             const [serverStatus, setServerStatus] = useState('idle');
 
-            // Riwayat Kode
             const [history, setHistory] = useState([TEMPLATES.saas]);
             const [historyIndex, setHistoryIndex] = useState(0);
 
-            // State Modal & Notifikasi
-            const [showSettingsModal, setShowSettingsModal] = useState(false);
             const [showPublishModal, setShowPublishModal] = useState(false);
-            const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-            
-            // State Simulasi DNS
             const [subdomainInput, setSubdomainInput] = useState('');
             const [isPublishing, setIsPublishing] = useState(false);
             const [publishStep, setPublishStep] = useState(0);
-            const [terminalLogs, setTerminalLogs] = useState([]);
             const [publishedSites, setPublishedSites] = useState([]);
             const [browserAddress, setBrowserAddress] = useState('');
 
-            // Efek Render Visual (Reveal)
             useEffect(() => {
+                const timer = setTimeout(() => {
+                    const glowElements = document.querySelectorAll('.section-bg-glow');
+                    glowElements.forEach(el => el.classList.add('glow-active'));
+                }, 150);
+
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) entry.target.classList.add('active');
@@ -207,36 +195,52 @@
                 const revealElements = document.querySelectorAll('.reveal');
                 revealElements.forEach(el => observer.observe(el));
 
-                return () => revealElements.forEach(el => observer.unobserve(el));
-            }, [viewMode, editorTab]);
+                return () => {
+                    clearTimeout(timer);
+                    revealElements.forEach(el => observer.unobserve(el));
+                };
+            }, [activeTab, viewMode, showCodeView, previewMode]);
 
-            // Inisialisasi awal
             useEffect(() => {
-                localStorage.setItem('situs_kilat_worker_url', workerUrl);
+                let formattedUrl = workerUrl;
+                if (formattedUrl.endsWith('/')) formattedUrl = formattedUrl.slice(0, -1);
+                localStorage.setItem('situs_kilat_worker_url', formattedUrl);
+            }, [workerUrl]);
+
+            useEffect(() => {
                 const savedSites = localStorage.getItem('situs_kilat_published_sites');
                 if (savedSites) setPublishedSites(JSON.parse(savedSites));
                 testWorkerConnection();
-            }, [workerUrl]);
+            }, []);
 
             const showToast = (message, type = 'success') => {
                 setToast({ show: true, message, type });
-                setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3500);
+                setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 4000);
             };
 
+            // MENGUJI KONEKSI KE WORKER (Pembaruan Endpoint: /auth)
             const testWorkerConnection = async () => {
-                setServerStatus('idle');
+                setServerStatus('fetching');
                 try {
-                    const response = await fetch(workerUrl, { method: "GET" });
-                    setServerStatus(response.ok ? 'connected' : 'failed');
+                    const url = workerUrl.endsWith('/') ? workerUrl.slice(0, -1) : workerUrl;
+                    const response = await fetch(`${url}/auth`, { method: "GET" });
+                    if (response.ok) {
+                        setServerStatus('connected');
+                    } else {
+                        setServerStatus('failed');
+                    }
                 } catch (e) {
                     setServerStatus('failed');
                 }
             };
 
+            // MENGAMBIL API KEY DARI WORKER (Pembaruan Endpoint: /auth)
             const fetchApiKeyFromWorker = async () => {
                 try {
-                    const response = await fetch(workerUrl, { method: "GET" });
+                    const url = workerUrl.endsWith('/') ? workerUrl.slice(0, -1) : workerUrl;
+                    const response = await fetch(`${url}/auth`, { method: "GET" });
                     if (!response.ok) throw new Error(`Worker HTTP error: ${response.status}`);
+                    
                     const data = await response.json();
                     if (data && data.success && data.apiKey) {
                         setServerStatus('connected');
@@ -245,7 +249,7 @@
                     throw new Error(data.error || "Skema respon JSON salah.");
                 } catch (err) {
                     setServerStatus('failed');
-                    throw new Error(`Gagal menarik kunci: ${err.message}`);
+                    throw new Error(`Gagal menarik kunci dari Worker: ${err.message}`);
                 }
             };
 
@@ -284,37 +288,39 @@
             };
 
             const handleAiGeneration = async (isEdit = false) => {
-                if (!prompt.trim()) return showToast('Masukkan instruksi Anda!', 'error');
+                if (!prompt.trim()) {
+                    showToast('Masukkan instruksi Anda terlebih dahulu!', 'error');
+                    return;
+                }
 
                 setIsLoading(true);
                 setViewMode('editor');
-                setEditorTab('preview'); // Kembalikan ke panel preview saat AI memproses
+                setActiveTab('preview');
 
                 let secureApiKey = "";
                 try {
                     secureApiKey = await fetchApiKeyFromWorker();
                 } catch (err) {
                     setIsLoading(false);
-                    showToast("API Key gagal ditarik dari Cloudflare.", "error");
+                    showToast("API Key gagal ditarik dari Cloudflare Worker.", "error");
                     setShowSettingsModal(true);
                     return;
                 }
 
                 const systemPrompt = isEdit
-                    ? `Anda adalah AI perancang web tingkat lanjut. Modifikasi kode HTML berikut sesuai instruksi. 
-                      Pertahankan gaya modern dan responsif. Berikan HANYA kode HTML mentah yang utuh.`
-                    : `Anda adalah AI perancang web satu halaman (Single Page) modern menggunakan Tailwind CSS. 
-                      Keluarkan HANYA kode HTML5 mandiri yang valid dan utuh tanpa bungkus markdown. 
-                      Desain harus terang, bersih, mewah dengan whitespace lega dan font Google 'Plus Jakarta Sans' atau 'Poppins'. Gunakan aset Unsplash berkualitas tinggi.`;
+                    ? `Anda adalah robot perancang web AI tingkat lanjut. Lakukan perubahan HTML sesuai instruksi. 
+                      Pertahankan kelas Tailwind. Berikan HANYA kode HTML mentah utuh.`
+                    : `Anda adalah robot pembuat website satu halaman (Single Page) modern menggunakan Tailwind CSS.
+                      Keluarkan HANYA kode HTML5 utuh. Desain harus cerah, premium, gunakan font Poppins, dan aset Unsplash.`;
 
                 const userPromptText = isEdit
-                    ? `KODE SAAT INI:\n${generatedCode}\n\nINSTRUKSI REVISI:\n${prompt}\nBerikan seluruh HTML secara lengkap.`
+                    ? `KODE SAAT INI:\n${generatedCode}\n\nREVISI:\n${prompt}\nBerikan seluruh HTML baru lengkap.`
                     : prompt;
 
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${secureApiKey}`;
 
                 try {
-                    const data = await fetchWithBackoff(url, {
+                    const responseData = await fetchWithBackoff(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -323,8 +329,8 @@
                         })
                     });
 
-                    let rawHtml = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!rawHtml) throw new Error('Respons AI kosong.');
+                    let rawHtml = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!rawHtml) throw new Error('Gagal menerima respons.');
 
                     let cleanedCode = rawHtml.trim();
                     if (cleanedCode.includes('```html')) cleanedCode = cleanedCode.split('```html')[1].split('```')[0];
@@ -334,381 +340,381 @@
                     setPrompt('');
                     showToast('Website berhasil dirancang!', 'success');
                 } catch (error) {
-                    showToast(`Gagal memproses: ${error.message}`, 'error');
+                    showToast(`Gagal: ${error.message}`, 'error');
                 } finally {
                     setIsLoading(false);
                 }
             };
 
-            const executePublishFlow = () => {
-                if (!subdomainInput.trim()) return showToast('Tentukan nama subdomain!', 'error');
+            // ==============================================================
+            // 🌐 PROSES GO LIVE NYATA: MENYIMPAN KE CLOUDFLARE KV DATABASE
+            // ==============================================================
+            const executePublishFlow = async () => {
+                if (!subdomainInput.trim()) {
+                    showToast('Tentukan nama proyek terlebih dahulu!', 'error');
+                    return;
+                }
+
                 const cleanSubdomain = subdomainInput.toLowerCase().replace(/[^a-z0-9-]/g, '');
-                if (publishedSites.some(s => s.subdomain === cleanSubdomain)) return showToast('Subdomain telah digunakan!', 'error');
-
+                
                 setIsPublishing(true);
-                setPublishStep(1);
-                setTerminalLogs([]);
+                setPublishStep(1); // Mulai loading UI
 
-                const logIt = (text, delay) => new Promise(r => setTimeout(() => {
-                    setTerminalLogs(prev => [...prev, `> ${text}`]);
-                    r();
-                }, delay));
-
-                logIt('Membuat DNS Record virtual...', 0)
-                    .then(() => logIt('Mengekspor file index.html...', 800))
-                    .then(() => { setPublishStep(2); return logIt('Menyebarkan ke node CDN Global...', 1000); })
-                    .then(() => { setPublishStep(3); return logIt('Menerbitkan sertifikat SSL Let\'s Encrypt...', 900); })
-                    .then(() => { setPublishStep(4); return logIt('Subdomain berhasil diluncurkan!', 600); })
-                    .then(() => {
-                        const newSites = [{
+                try {
+                    const url = workerUrl.endsWith('/') ? workerUrl.slice(0, -1) : workerUrl;
+                    
+                    // POST Request ke Cloudflare Worker Endpoint /publish
+                    const response = await fetch(`${url}/publish`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
                             subdomain: cleanSubdomain,
-                            code: generatedCode,
-                            title: generatedCode.match(/<title>([^<]*)<\/title>/i)?.[1] || 'Situs Baru'
-                        }, ...publishedSites];
-                        setPublishedSites(newSites);
-                        localStorage.setItem('situs_kilat_published_sites', JSON.stringify(newSites));
-                        setIsPublishing(false);
-                        showToast('Website berhasil Go Live!', 'success');
+                            html: generatedCode
+                        })
                     });
+
+                    setPublishStep(2);
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        setPublishStep(4); // Sukses UI
+                        
+                        // Simpan histori ke memori lokal
+                        const newSite = {
+                            subdomain: cleanSubdomain,
+                            liveUrl: result.url, // URL Live sesungguhnya dari server
+                            code: generatedCode,
+                            title: getTitleFromHtml(generatedCode) || 'Situs Kilat'
+                        };
+                        const updated = [newSite, ...publishedSites.filter(s => s.subdomain !== cleanSubdomain)];
+                        
+                        setPublishedSites(updated);
+                        localStorage.setItem('situs_kilat_published_sites', JSON.stringify(updated));
+                        showToast('Situs Anda kini resmi LIVE di seluruh dunia!', 'success');
+                    } else {
+                        throw new Error(result.error || "Terjadi kesalahan di server.");
+                    }
+                } catch (error) {
+                    console.error("Publishing Error:", error);
+                    showToast(`Gagal publikasi: ${error.message}`, 'error');
+                    setPublishStep(0); // Kembalikan ke form
+                } finally {
+                    setIsPublishing(false);
+                }
             };
 
-            // TAMPILAN BLOKIR UNTUK MOBILE (Hanya Desktop)
-            const MobileBlocker = () => (
-                <div className="flex lg:hidden fixed inset-0 z-[9999] bg-white flex-col items-center justify-center p-8 text-center">
-                    <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mb-6">
-                        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h1 className="text-2xl font-extrabold text-gray-900 mb-3">Mohon Buka di Desktop</h1>
-                    <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
-                        SitusKilat AI Pro adalah lingkungan perancangan web kompleks yang memerlukan layar lebar. Silakan akses tautan ini melalui komputer atau laptop Anda.
-                    </p>
-                </div>
-            );
+            const getTitleFromHtml = (htmlStr) => {
+                const match = htmlStr.match(/<title>([^<]*)<\/title>/i);
+                return match ? match[1] : '';
+            };
+
+            const handleDeleteSite = (subdomain, e) => {
+                e.stopPropagation();
+                const filtered = publishedSites.filter(site => site.subdomain !== subdomain);
+                setPublishedSites(filtered);
+                localStorage.setItem('situs_kilat_published_sites', JSON.stringify(filtered));
+                showToast(`Situs ${subdomain} dihapus dari riwayat lokal.`, 'info');
+            };
+
+            const handleDownloadCode = () => {
+                const blob = new Blob([generatedCode], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'index.html';
+                a.click();
+                URL.revokeObjectURL(url);
+            };
 
             return (
-                <React.Fragment>
-                    <MobileBlocker />
+                <div className="flex flex-col h-screen w-full bg-gray-50 text-gray-900 overflow-hidden font-sans">
                     
-                    {/* Aplikasi Utama (Tersembunyi di Mobile, Muncul di LG ke atas) */}
-                    <div className="hidden lg:flex flex-col h-screen w-full bg-gray-50 overflow-hidden font-sans">
-                        
-                        {/* Notifikasi Toast */}
-                        {toast.show && (
-                            <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl transition-all border text-sm animate-fadeIn \${
-                                toast.type === 'success' ? 'bg-white border-green-100 text-green-700' :
-                                toast.type === 'error' ? 'bg-white border-red-100 text-red-700' : 'bg-white border-indigo-100 text-indigo-700'
-                            }`}>
-                                <p className="font-semibold">{toast.message}</p>
-                            </div>
-                        )}
+                    {/* Toast */}
+                    {toast.show && (
+                        <div className={`fixed top-6 right-6 z-[100] flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl border text-sm animate-fadeIn \${
+                            toast.type === 'success' ? 'bg-white border-green-100 text-green-700' :
+                            toast.type === 'error' ? 'bg-white border-red-100 text-red-700' : 'bg-white border-indigo-100 text-indigo-700'
+                        }`}>
+                            <p className="font-semibold">{toast.message}</p>
+                        </div>
+                    )}
 
-                        {/* Top Header Menempel */}
-                        <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-lg border-b border-gray-200 flex items-center justify-between px-6 py-4 shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                    {/* Desktop Blocker untuk Mobile View */}
+                    <div className="flex lg:hidden fixed inset-0 z-[999] bg-white flex-col items-center justify-center p-8 text-center">
+                        <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mb-6">
+                            <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h1 className="text-2xl font-extrabold text-gray-900 mb-3">Akses Dibatasi</h1>
+                        <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
+                            Platform pembuat web ini didesain khusus untuk penggunaan layar lebar. Mohon buka tautan ini melalui komputer atau laptop Anda.
+                        </p>
+                    </div>
+
+                    {/* App Header (S-Tools ID Guidelines) */}
+                    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-gray-200 flex items-center justify-between px-6 py-4 shadow-sm hidden lg:flex">
+                        <div className="flex items-center gap-3">
+                            <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-gray-600 hover:text-indigo-600 hover:bg-gray-100 rounded-xl transition-all duration-200">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                            </button>
+                            <div className="flex items-center gap-2">
+                                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                 </div>
                                 <div>
-                                    <span className="text-lg font-extrabold tracking-tight text-gray-900">
-                                        SitusKilat <span className="text-gradient">AI Pro</span>
+                                    <span className="text-base font-extrabold tracking-tight text-gray-900">
+                                        SitusKilat <span className="text-gradient font-black">AI Pro</span>
                                     </span>
                                 </div>
                             </div>
-
-                            {/* View Switcher (Editor vs Situs Live) */}
-                            <div className="flex items-center bg-gray-100 p-1.5 rounded-xl border border-gray-200">
-                                <button 
-                                    onClick={() => setViewMode('editor')}
-                                    className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold transition-all duration-200 \${viewMode === 'editor' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                    Ruang Kerja
-                                </button>
-                                <button 
-                                    onClick={() => {
-                                        if (publishedSites.length === 0) return showToast('Terbitkan website terlebih dahulu!', 'info');
-                                        setViewMode('browser');
-                                        setBrowserAddress(`https://\${publishedSites[0].subdomain}.situskilat.id`);
-                                    }}
-                                    className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold transition-all duration-200 \${viewMode === 'browser' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                                    Website Live
-                                </button>
-                            </div>
-
-                            <div className="flex items-center gap-3">
-                                <button onClick={() => setShowSettingsModal(true)} className="p-2.5 text-gray-500 hover:text-indigo-600 hover:bg-gray-100 rounded-xl transition" title="Pengaturan Server">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                </button>
-                                <button 
-                                    onClick={() => { setSubdomainInput(''); setPublishStep(0); setShowPublishModal(true); }}
-                                    className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-full text-sm font-bold shadow-lg shadow-blue-500/30 transform hover:scale-105 hover:opacity-90 transition-all flex items-center gap-2"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                                    Go Live
-                                </button>
-                            </div>
-                        </header>
-
-                        {/* Ruang Kerja 2 Kolom (Tidak Padat) */}
-                        <div className="flex flex-1 overflow-hidden p-5 gap-5">
-                            
-                            {viewMode === 'editor' && (
-                                <React.Fragment>
-                                    {/* Kolom Kiri: AI & Kontrol (Lebar Tetap) */}
-                                    <aside className="w-[420px] bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col flex-shrink-0 overflow-hidden">
-                                        <div className="p-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-                                            <h3 className="font-bold text-gray-900">Perancang AI</h3>
-                                            <div className="flex gap-1">
-                                                <button onClick={handleUndo} disabled={historyIndex === 0} className="p-1.5 text-gray-500 hover:text-indigo-600 bg-white border border-gray-200 rounded disabled:opacity-30"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg></button>
-                                                <button onClick={handleRedo} disabled={historyIndex >= history.length - 1} className="p-1.5 text-gray-500 hover:text-indigo-600 bg-white border border-gray-200 rounded disabled:opacity-30"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.934 12.8a1 1 0 000-1.6l-5.334-4A1 1 0 005 8v8a1 1 0 001.6.8l5.334-4z"></path></svg></button>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex-1 overflow-y-auto p-5 custom-scrollbar space-y-6">
-                                            
-                                            {/* AI Prompt Input */}
-                                            <div className="space-y-3">
-                                                <div className="relative">
-                                                    <textarea
-                                                        value={prompt}
-                                                        onChange={(e) => setPrompt(e.target.value)}
-                                                        placeholder="Jelaskan desain web impian Anda dengan detail di sini..."
-                                                        className="w-full bg-gray-50 border border-gray-200 focus:border-indigo-500 focus:bg-white rounded-xl p-4 text-sm text-gray-800 focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all duration-200 resize-none h-40 leading-relaxed shadow-inner"
-                                                        disabled={isLoading}
-                                                    />
-                                                </div>
-                                                
-                                                <div className="flex flex-wrap gap-2">
-                                                    <button onClick={() => setPrompt(prev => prev + " dengan palet warna putih minimalis, bersih, elegan.")} className="px-3 py-1.5 text-xs bg-gray-50 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 rounded-lg border border-gray-200 transition">🌿 Minimalis</button>
-                                                    <button onClick={() => setPrompt(prev => prev + " dengan palet gelap (dark mode), neon biru dan ungu.")} className="px-3 py-1.5 text-xs bg-gray-50 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 rounded-lg border border-gray-200 transition">🌙 Dark Mode</button>
-                                                    <button onClick={() => setPrompt(prev => prev + " tambahkan animasi hover yang smooth dan desain kartu modern.")} className="px-3 py-1.5 text-xs bg-gray-50 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 rounded-lg border border-gray-200 transition">✨ Dinamis</button>
-                                                </div>
-
-                                                <div className="grid grid-cols-2 gap-3 pt-2">
-                                                    <button onClick={() => handleAiGeneration(false)} disabled={isLoading} className="py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition flex items-center justify-center gap-2">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg> Buat Baru
-                                                    </button>
-                                                    <button onClick={() => handleAiGeneration(true)} disabled={isLoading} className="py-3 bg-white border border-gray-200 text-indigo-600 hover:bg-gray-50 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg> Edit Area
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <hr className="border-gray-100" />
-
-                                            {/* Templates List */}
-                                            <div className="space-y-3">
-                                                <h4 className="text-sm font-bold text-gray-900">Templat Dasar</h4>
-                                                <div className="space-y-2">
-                                                    <button onClick={() => updateCodeWithHistory(TEMPLATES.saas)} className="w-full p-4 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl flex items-center gap-4 text-left transition group">
-                                                        <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
-                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                                                        </div>
-                                                        <div>
-                                                            <h5 className="font-semibold text-gray-900 text-sm">Corporate SaaS</h5>
-                                                            <p className="text-xs text-gray-500">Startup & Agensi</p>
-                                                        </div>
-                                                    </button>
-                                                    <button onClick={() => updateCodeWithHistory(TEMPLATES.coffee)} className="w-full p-4 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl flex items-center gap-4 text-left transition group">
-                                                        <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
-                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                                        </div>
-                                                        <div>
-                                                            <h5 className="font-semibold text-gray-900 text-sm">Café Bistro</h5>
-                                                            <p className="text-xs text-gray-500">Elegan & Hangat</p>
-                                                        </div>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </aside>
-
-                                    {/* Kolom Kanan: Canvas Pratinjau & Kode (Lebar Fleksibel) */}
-                                    <main className="flex-1 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col overflow-hidden relative">
-                                        {/* Canvas Header & Toggles */}
-                                        <div className="px-5 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50/50">
-                                            
-                                            {/* Tab: Pratinjau vs Kode */}
-                                            <div className="flex items-center bg-gray-200/60 p-1 rounded-lg">
-                                                <button 
-                                                    onClick={() => setEditorTab('preview')}
-                                                    className={`px-5 py-1.5 rounded-md text-sm font-semibold transition-all \${editorTab === 'preview' ? 'bg-white text-indigo-600 shadow' : 'text-gray-500 hover:text-gray-900'}`}
-                                                >
-                                                    Visual
-                                                </button>
-                                                <button 
-                                                    onClick={() => setEditorTab('code')}
-                                                    className={`px-5 py-1.5 rounded-md text-sm font-semibold transition-all \${editorTab === 'code' ? 'bg-white text-indigo-600 shadow' : 'text-gray-500 hover:text-gray-900'}`}
-                                                >
-                                                    Kode Sumber
-                                                </button>
-                                            </div>
-
-                                            <div className="flex items-center gap-3">
-                                                {/* Device Switcher (Hanya saat mode preview) */}
-                                                {editorTab === 'preview' && (
-                                                    <div className="flex items-center gap-1">
-                                                        <button onClick={() => setPreviewMode('desktop')} className={`p-2 rounded-lg transition \${previewMode === 'desktop' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></button>
-                                                        <button onClick={() => setPreviewMode('tablet')} className={`p-2 rounded-lg transition \${previewMode === 'tablet' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></button>
-                                                        <button onClick={() => setPreviewMode('mobile')} className={`p-2 rounded-lg transition \${previewMode === 'mobile' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></button>
-                                                    </div>
-                                                )}
-
-                                                <div className="w-px h-6 bg-gray-200"></div>
-
-                                                <button onClick={() => {
-                                                    const blob = new Blob([generatedCode], { type: 'text/html' });
-                                                    const a = document.createElement('a');
-                                                    a.href = URL.createObjectURL(blob);
-                                                    a.download = 'index.html';
-                                                    a.click();
-                                                    showToast('File diunduh');
-                                                }} className="text-gray-500 hover:text-indigo-600 font-semibold text-sm flex items-center gap-1.5 transition">
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                                    Unduh
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* Canvas Area Container */}
-                                        <div className="flex-1 relative bg-gray-100 overflow-hidden flex items-center justify-center p-4">
-                                            {isLoading && (
-                                                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-30 flex flex-col items-center justify-center animate-fadeIn">
-                                                    <div className="w-12 h-12 rounded-full border-4 border-indigo-100 border-t-indigo-600 animate-spin mb-4"></div>
-                                                    <h4 className="font-bold text-gray-900">Merender Desain AI...</h4>
-                                                </div>
-                                            )}
-
-                                            {/* PRATINJAU VISUAL */}
-                                            {editorTab === 'preview' && (
-                                                <div className={`h-full transition-all duration-300 shadow-xl overflow-hidden \${
-                                                    previewMode === 'mobile' ? 'w-[375px] rounded-[40px] border-[6px] border-gray-900' : 
-                                                    previewMode === 'tablet' ? 'w-[768px] rounded-[30px] border-[6px] border-gray-900' : 'w-full rounded-xl border border-gray-300'
-                                                }`}>
-                                                    <iframe srcDoc={generatedCode} className="w-full h-full border-none bg-white" sandbox="allow-scripts allow-same-origin"/>
-                                                </div>
-                                            )}
-
-                                            {/* EDITOR KODE (VS Code Style / Dark Mode untuk kontras) */}
-                                            {editorTab === 'code' && (
-                                                <div className="w-full h-full bg-[#0f172a] rounded-xl shadow-inner border border-gray-800 flex flex-col overflow-hidden animate-fadeIn">
-                                                    <div className="bg-[#1e293b] px-4 py-2 border-b border-gray-700 flex justify-between items-center">
-                                                        <span className="text-gray-400 text-xs font-mono">index.html</span>
-                                                        <button onClick={() => {
-                                                            navigator.clipboard.writeText(generatedCode);
-                                                            showToast('Kode disalin!');
-                                                        }} className="text-xs text-indigo-400 hover:text-indigo-300 font-mono">Salin Kode</button>
-                                                    </div>
-                                                    <textarea
-                                                        value={generatedCode}
-                                                        onChange={(e) => {
-                                                            setGeneratedCode(e.target.value);
-                                                            const hist = history.slice(0, historyIndex + 1);
-                                                            hist.push(e.target.value);
-                                                            setHistory(hist);
-                                                            setHistoryIndex(hist.length - 1);
-                                                        }}
-                                                        className="w-full h-full bg-transparent text-gray-300 p-4 font-mono text-sm resize-none outline-none dark-scrollbar leading-relaxed"
-                                                        spellCheck={false}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </main>
-                                </React.Fragment>
-                            )}
-
-                            {/* View Mode: BROWSER / SITUS LIVE */}
-                            {viewMode === 'browser' && (
-                                <main className="flex-1 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col overflow-hidden animate-fadeIn">
-                                    <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center gap-4">
-                                        <div className="flex gap-2">
-                                            <span className="w-3 h-3 rounded-full bg-red-400"></span>
-                                            <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
-                                            <span className="w-3 h-3 rounded-full bg-green-400"></span>
-                                        </div>
-                                        <button onClick={() => setViewMode('editor')} className="p-1.5 text-gray-500 hover:text-gray-900 bg-white rounded shadow-sm border border-gray-200">
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                                        </button>
-                                        <div className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 flex items-center justify-between shadow-inner">
-                                            <div className="flex items-center gap-2 text-sm text-gray-600 w-full">
-                                                <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                                                <span>https://</span>
-                                                <input value={browserAddress.replace('https://', '')} onChange={(e) => setBrowserAddress(`https://\${e.target.value}`)} className="flex-1 outline-none text-gray-900 font-medium" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex-1 bg-white relative">
-                                        <iframe 
-                                            srcDoc={
-                                                publishedSites.find(s => s.subdomain === browserAddress.replace('https://', '').replace('.situskilat.id', ''))?.code || 
-                                                `<div style="padding:40px;text-align:center;font-family:sans-serif;"><h1>404</h1><p>Situs tidak ditemukan</p></div>`
-                                            }
-                                            className="w-full h-full border-none" sandbox="allow-scripts allow-same-origin"
-                                        />
-                                    </div>
-                                </main>
-                            )}
                         </div>
 
-                        {/* MODALS */}
-                        {showPublishModal && (
-                            <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
-                                <div className="bg-white p-8 rounded-3xl max-w-md w-full shadow-2xl animate-scaleIn">
-                                    <h3 className="text-2xl font-extrabold text-gray-900 mb-2">Terbitkan Website</h3>
-                                    <p className="text-gray-500 text-sm mb-6">Miliki link kustom instan di server DNS kami.</p>
+                        {/* View Switcher Tabs */}
+                        <div className="flex items-center gap-1 bg-gray-100 p-1.5 rounded-2xl border border-gray-200">
+                            <button 
+                                onClick={() => setViewMode('editor')}
+                                className={`px-4 py-2 rounded-xl flex items-center gap-2 text-xs font-bold transition-all duration-200 \${viewMode === 'editor' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+                            >
+                                Editor Visual
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    if (publishedSites.length === 0) return showToast('Belum ada situs yang terbit!', 'info');
+                                    setViewMode('browser');
+                                }}
+                                className={`px-4 py-2 rounded-xl flex items-center gap-2 text-xs font-bold transition-all duration-200 \${viewMode === 'browser' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'}`}
+                            >
+                                Manajer Situs ({publishedSites.length})
+                            </button>
+                        </div>
 
-                                    {publishStep === 0 ? (
-                                        <div className="space-y-5">
-                                            <div className="flex items-center bg-gray-50 border border-gray-200 focus-within:border-indigo-500 rounded-xl px-4 py-3.5 transition">
-                                                <input type="text" placeholder="nama-proyek" value={subdomainInput} onChange={(e) => setSubdomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} className="bg-transparent outline-none flex-1 font-bold text-gray-900 text-right pr-1"/>
-                                                <span className="text-indigo-600 font-bold">.situskilat.id</span>
-                                            </div>
-                                            <div className="flex gap-3">
-                                                <button onClick={() => setShowPublishModal(false)} className="flex-1 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition">Batal</button>
-                                                <button onClick={executePublishFlow} className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition shadow-lg shadow-indigo-600/30">Luncurkan</button>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="text-center py-6">
-                                            {publishStep < 4 ? (
-                                                <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mx-auto mb-6"></div>
-                                            ) : (
-                                                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6"><svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg></div>
-                                            )}
-                                            <h4 className="font-bold text-gray-900 text-lg">{publishStep < 4 ? 'Menyiapkan DNS...' : 'Situs Mengudara!'}</h4>
-                                            {publishStep === 4 && (
-                                                <button onClick={() => { setShowPublishModal(false); setViewMode('browser'); setBrowserAddress(`https://\${subdomainInput}.situskilat.id`); }} className="mt-6 w-full py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition">Buka Tautan</button>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
+                        {/* Actions Control (CTA S-Tools ID) */}
+                        <div className="flex items-center gap-2.5">
+                            <div className="flex items-center bg-gray-100 p-1 rounded-xl gap-0.5 border border-gray-200">
+                                <button onClick={handleUndo} disabled={historyIndex === 0} className="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white rounded-lg disabled:opacity-30 transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg></button>
+                                <button onClick={handleRedo} disabled={historyIndex >= history.length - 1} className="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white rounded-lg disabled:opacity-30 transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11.934 12.8a1 1 0 000-1.6l-5.334-4A1 1 0 005 8v8a1 1 0 001.6.8l5.334-4z"></path></svg></button>
                             </div>
+
+                            <button onClick={() => setShowSettingsModal(true)} className="p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-gray-100 rounded-xl border border-gray-200 transition-all" title="Konfigurasi Cloudflare">
+                                <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </button>
+
+                            <button onClick={() => { setSubdomainInput(''); setPublishStep(0); setShowPublishModal(true); }} className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-full text-xs font-bold transition-all transform hover:scale-105 hover:opacity-90 shadow-lg shadow-blue-500/30 flex items-center gap-1.5">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                                <span>Go Live</span>
+                            </button>
+                        </div>
+                    </header>
+
+                    {/* Ruang Kerja: Kiri & Kanan */}
+                    <div className="hidden lg:flex flex-1 overflow-hidden p-5 gap-5">
+                        
+                        {viewMode === 'editor' && (
+                            <React.Fragment>
+                                {/* KOLOM KIRI: AI & KONTROL (Lebar Fix) */}
+                                <aside className={`\${sidebarOpen ? 'w-[400px] flex' : 'w-0 hidden'} flex-col bg-white rounded-2xl border border-gray-200 shadow-sm flex-shrink-0 transition-all duration-300 overflow-hidden`}>
+                                    <div className="flex-1 overflow-y-auto p-5 custom-scrollbar space-y-6">
+                                        
+                                        {/* Prompt Area Card */}
+                                        <div className="reveal rounded-2xl border border-gray-100 bg-gray-50/50 p-4 space-y-3 shadow-inner">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-xs font-extrabold text-indigo-600 uppercase tracking-wider flex items-center gap-1.5">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                                    Asisten AI
+                                                </span>
+                                            </div>
+
+                                            <textarea
+                                                value={prompt}
+                                                onChange={(e) => setPrompt(e.target.value)}
+                                                placeholder="Jelaskan kebutuhan desain web Anda di sini..."
+                                                className="w-full bg-white border border-gray-200 focus:border-indigo-500 rounded-xl p-3.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all resize-none h-36 leading-relaxed shadow-sm"
+                                                disabled={isLoading}
+                                            />
+
+                                            <div className="grid grid-cols-2 gap-2 pt-1">
+                                                <button onClick={() => handleAiGeneration(false)} disabled={isLoading} className="py-2.5 bg-gradient-to-r from-indigo-600 to-blue-500 hover:scale-105 hover:opacity-90 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-all transform flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20">
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg> Buat Baru
+                                                </button>
+                                                <button onClick={() => handleAiGeneration(true)} disabled={isLoading} className="py-2.5 bg-white border border-gray-200 hover:border-indigo-500 hover:text-indigo-600 text-gray-700 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg> Ubah Kode
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Templates Card List */}
+                                        <div className="space-y-2.5">
+                                            <span className="text-xs font-black uppercase tracking-wider text-gray-400 block">Templat Dasar</span>
+                                            <div className="grid grid-cols-1 gap-2.5">
+                                                <button onClick={() => updateCodeWithHistory(TEMPLATES.saas)} className="reveal p-3.5 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl flex items-center gap-3.5 text-left transition-all hover:shadow-md hover:border-indigo-500 group">
+                                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                                    </div>
+                                                    <div>
+                                                        <h5 className="text-xs font-bold text-gray-900">Corporate & SaaS</h5>
+                                                    </div>
+                                                </button>
+                                                <button onClick={() => updateCodeWithHistory(TEMPLATES.coffee)} className="reveal p-3.5 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl flex items-center gap-3.5 text-left transition-all hover:shadow-md hover:border-indigo-500 group">
+                                                    <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                                    </div>
+                                                    <div>
+                                                        <h5 className="text-xs font-bold text-gray-900">Café & Resto Estetik</h5>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </aside>
+
+                                {/* KOLOM KANAN: KANVAS PRATINJAU / KODE SUMBER */}
+                                <main className="flex-1 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col overflow-hidden relative">
+                                    <div className="px-5 py-3.5 border-b border-gray-200 flex items-center justify-between bg-gray-50/50">
+                                        
+                                        <div className="flex items-center bg-gray-200/50 p-1 rounded-xl">
+                                            <button onClick={() => setActiveTab('preview')} className={`px-5 py-1.5 rounded-lg text-xs font-bold transition-all \${activeTab === 'preview' ? 'bg-white text-indigo-600 shadow' : 'text-gray-500 hover:text-gray-900'}`}>Tampilan Web</button>
+                                            <button onClick={() => setActiveTab('code')} className={`px-5 py-1.5 rounded-lg text-xs font-bold transition-all \${activeTab === 'code' ? 'bg-white text-indigo-600 shadow' : 'text-gray-500 hover:text-gray-900'}`}>Kode Sumber</button>
+                                        </div>
+
+                                        {activeTab === 'preview' && (
+                                            <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
+                                                <button onClick={() => setPreviewMode('desktop')} className={`p-1.5 rounded-md transition \${previewMode === 'desktop' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></button>
+                                                <button onClick={() => setPreviewMode('tablet')} className={`p-1.5 rounded-md transition \${previewMode === 'tablet' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></button>
+                                                <button onClick={() => setPreviewMode('mobile')} className={`p-1.5 rounded-md transition \${previewMode === 'mobile' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></button>
+                                            </div>
+                                        )}
+                                        {activeTab === 'code' && (
+                                            <button onClick={() => { navigator.clipboard.writeText(generatedCode); showToast('Kode disalin!'); }} className="text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100 transition">Salin Kode</button>
+                                        )}
+                                    </div>
+
+                                    <div className="flex-1 relative overflow-hidden bg-gray-100 section-bg-glow flex items-center justify-center p-6">
+                                        {isLoading && (
+                                            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-30 flex flex-col items-center justify-center animate-fadeIn">
+                                                <div className="w-14 h-14 rounded-full border-4 border-indigo-100 border-t-indigo-600 animate-spin mb-4"></div>
+                                                <h4 className="font-bold text-gray-900 text-lg">Merakit Kode AI...</h4>
+                                            </div>
+                                        )}
+
+                                        {/* Tampilan Visual Preview */}
+                                        {activeTab === 'preview' && (
+                                            <div className={`h-full bg-white shadow-2xl transition-all duration-300 overflow-hidden \${
+                                                previewMode === 'mobile' ? 'w-[375px] rounded-[45px] border-[8px] border-slate-900' : 
+                                                previewMode === 'tablet' ? 'w-[768px] rounded-[30px] border-[8px] border-slate-900' : 'w-full rounded-xl border border-gray-200'
+                                            }`}>
+                                                <iframe srcDoc={generatedCode} className="w-full h-full border-none" sandbox="allow-scripts allow-same-origin"/>
+                                            </div>
+                                        )}
+
+                                        {/* Tampilan Kode Sumber */}
+                                        {activeTab === 'code' && (
+                                            <div className="w-full h-full bg-[#0f172a] rounded-xl shadow-inner border border-gray-800 flex flex-col overflow-hidden animate-fadeIn">
+                                                <textarea
+                                                    value={generatedCode}
+                                                    onChange={(e) => setGeneratedCode(e.target.value)}
+                                                    className="w-full h-full bg-transparent text-gray-300 p-5 font-mono text-sm resize-none outline-none custom-scrollbar leading-relaxed"
+                                                    spellCheck={false}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                </main>
+                            </React.Fragment>
                         )}
 
-                        {showSettingsModal && (
-                            <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
-                                <div className="bg-white p-8 rounded-3xl max-w-md w-full shadow-2xl animate-scaleIn">
-                                    <h3 className="text-2xl font-extrabold text-gray-900 mb-2">Pengaturan Server</h3>
-                                    <p className="text-gray-500 text-sm mb-6">Kelola koneksi Cloudflare Worker Anda.</p>
-                                    
-                                    <div className="space-y-5">
-                                        <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Endpoint Worker URL</label>
-                                            <input type="text" value={workerUrl} onChange={(e) => setWorkerUrl(e.target.value)} className="mt-2 w-full bg-gray-50 border border-gray-200 focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-gray-900 outline-none transition" />
+                        {viewMode === 'browser' && (
+                            <main className="flex-1 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col overflow-hidden animate-fadeIn">
+                                <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center gap-4">
+                                    <div className="flex gap-2">
+                                        <span className="w-3 h-3 rounded-full bg-red-400"></span>
+                                        <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
+                                        <span className="w-3 h-3 rounded-full bg-green-400"></span>
+                                    </div>
+                                    <button onClick={() => setViewMode('editor')} className="p-1.5 text-gray-500 hover:text-gray-900 bg-white rounded shadow-sm border border-gray-200">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                                    </button>
+                                    <div className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 flex items-center justify-between shadow-inner">
+                                        <div className="flex items-center gap-2 text-sm text-gray-600 w-full">
+                                            <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            <span>https://</span>
+                                            <input value={browserAddress.replace('https://', '')} onChange={(e) => setBrowserAddress(`https://\${e.target.value}`)} className="flex-1 outline-none text-gray-900 font-medium" />
                                         </div>
-                                        <div className="p-4 bg-gray-50 rounded-xl text-xs text-gray-600">
-                                            Status: <strong className={serverStatus === 'connected' ? 'text-green-600' : 'text-red-600'}>{serverStatus === 'connected' ? 'Terhubung (Aman)' : 'Tidak Valid'}</strong>
-                                        </div>
-                                        <button onClick={() => { testWorkerConnection(); setShowSettingsModal(false); }} className="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-600/30">Simpan Konfigurasi</button>
                                     </div>
                                 </div>
-                            </div>
+                                <div className="flex-1 bg-white relative">
+                                    {browserAddress ? (
+                                        <iframe src={browserAddress} className="w-full h-full border-none" />
+                                    ) : (
+                                        <div className="flex flex-col items-center justify-center h-full text-gray-400">Pilih situs dari daftar dropdown di atas.</div>
+                                    )}
+                                </div>
+                            </main>
                         )}
                     </div>
-                </React.Fragment>
+
+                    {/* MODAL GO LIVE: DATABASE KV CONNECTED */}
+                    {showPublishModal && (
+                        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-[100] animate-fadeIn">
+                            <div className="bg-white p-8 rounded-[2rem] max-w-md w-full shadow-2xl animate-scaleIn relative">
+                                <button onClick={() => { if (!isPublishing) setShowPublishModal(false); }} className="absolute top-6 right-6 text-gray-400 hover:text-gray-800" disabled={isPublishing}>
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                                
+                                <h3 className="text-2xl font-extrabold text-gray-900 mb-2">Terbitkan Website</h3>
+                                <p className="text-gray-500 text-sm mb-8">Pilih identitas unik untuk situs Anda. Data akan langsung terhubung ke Database Cloudflare.</p>
+
+                                {publishStep === 0 ? (
+                                    <div className="space-y-6">
+                                        <div className="flex items-center bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:bg-white rounded-xl px-4 py-4 transition-all duration-300">
+                                            <input type="text" placeholder="nama-toko" value={subdomainInput} onChange={(e) => setSubdomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} className="bg-transparent outline-none flex-1 font-bold text-gray-900 text-right pr-2"/>
+                                            <span className="text-indigo-600 font-bold border-l border-gray-200 pl-2">.situskilat.id</span>
+                                        </div>
+                                        <div className="flex gap-3">
+                                            <button onClick={() => setShowPublishModal(false)} className="flex-1 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full font-bold transition-all">Batal</button>
+                                            <button onClick={executePublishFlow} className="flex-1 py-3.5 bg-gradient-to-r from-indigo-600 to-blue-500 hover:scale-105 hover:opacity-90 text-white rounded-full font-bold transition-all transform shadow-lg shadow-blue-500/30">Publikasi</button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-6">
+                                        {publishStep < 4 ? (
+                                            <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mx-auto mb-6"></div>
+                                        ) : (
+                                            <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6"><svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg></div>
+                                        )}
+                                        <h4 className="font-bold text-gray-900 text-lg">{publishStep < 4 ? 'Menyimpan ke Cloudflare DB...' : 'Situs Mengudara!'}</h4>
+                                        {publishStep === 4 && (
+                                            <button onClick={() => { setShowPublishModal(false); setViewMode('browser'); setBrowserAddress(publishedSites[0]?.liveUrl || ''); }} className="mt-8 w-full py-3.5 bg-gray-900 text-white rounded-full font-bold hover:bg-gray-800 transition-all">Lihat Situs Saya</button>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL SETTINGS: WORKER CONFIG */}
+                    {showSettingsModal && (
+                        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-[100] animate-fadeIn">
+                            <div className="bg-white p-8 rounded-[2rem] max-w-md w-full shadow-2xl animate-scaleIn relative">
+                                <button onClick={() => { setShowSettingsModal(false); }} className="absolute top-6 right-6 text-gray-400 hover:text-gray-800 transition-all">
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                                <h3 className="text-2xl font-extrabold text-gray-900 mb-2">Konfigurasi Gateway</h3>
+                                <p className="text-gray-500 text-sm mb-6">Kelola Worker URL untuk Otorisasi dan Database.</p>
+                                <div className="space-y-5">
+                                    <div>
+                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Endpoint Worker Anda</label>
+                                        <input type="text" value={workerUrl} onChange={(e) => setWorkerUrl(e.target.value)} className="mt-2 w-full bg-gray-50 border border-gray-200 focus:bg-white focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-gray-900 outline-none transition-all font-mono" />
+                                    </div>
+                                    <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-xl border border-gray-200">
+                                        <span className={`w-3 h-3 rounded-full \${serverStatus === 'connected' ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                                        <span className="text-xs font-bold text-gray-700">{serverStatus === 'connected' ? 'Terkoneksi ke Cloudflare' : 'Server Tidak Valid'}</span>
+                                    </div>
+                                    <button onClick={() => { testWorkerConnection(); setShowSettingsModal(false); }} className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-blue-500 hover:scale-105 text-white rounded-full font-bold shadow-lg shadow-blue-500/30 transition-all transform">Simpan & Uji</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             );
         }
 
