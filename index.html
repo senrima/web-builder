@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SitusKilat AI Pro - AI Website Builder</title>
+    <title>S-Tools AI Pro - AI Website Builder</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -248,7 +248,7 @@
                     if (!response.ok) {
                         const errData = await response.json().catch(() => ({}));
                         const errMsg = errData.error?.message || `HTTP ${response.status}`;
-                        // Langsung lemparkan error tanpa menunggu retry jika masalahnya fatal (spt Kunci salah/Model tidak ada)
+                        // Langsung lemparkan error tanpa menunggu retry jika masalahnya fatal
                         if (response.status >= 400 && response.status < 500) throw new Error(`[${response.status}] ${errMsg}`);
                         throw new Error(errMsg);
                     }
@@ -276,6 +276,7 @@
                 let secureApiKey = "";
                 try {
                     secureApiKey = await fetchApiKeyFromWorker();
+                    secureApiKey = secureApiKey.trim(); // Pastikan tidak ada spasi/enter tersembunyi yang merusak URL API
                 } catch (err) {
                     setIsLoading(false);
                     showToast(err.message, "error");
@@ -292,8 +293,7 @@
                     ? `KODE SAAT INI:\n${generatedCode}\n\nINSTRUKSI REVISI:\n${prompt}\nBerikan seluruh HTML secara lengkap.`
                     : prompt;
 
-                // FIX: MENGGUNAKAN MODEL GEMINI 1.5 FLASH AGAR 100% KOMPATIBEL DENGAN PUBLIC API KEY
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${secureApiKey}`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${secureApiKey}`;
 
                 try {
                     const data = await fetchWithBackoff(url, {
@@ -316,11 +316,8 @@
                     setPrompt('');
                     showToast('Desain selesai dirakit!', 'success');
                 } catch (error) {
-                    let userFriendlyError = error.message;
-                    if (error.message.includes('400')) userFriendlyError = "API Key tidak valid atau permintaan ditolak Google.";
-                    if (error.message.includes('404')) userFriendlyError = "Model AI sedang tidak tersedia.";
-                    if (error.message.includes('403')) userFriendlyError = "Akses terlarang ke Google API. Coba ganti kunci Anda.";
-                    showToast(`GAGAL: ${userFriendlyError}`, 'error');
+                    // Tampilkan pesan error ASLI dari Google agar penyebabnya jelas
+                    showToast(`GAGAL: ${error.message}`, 'error');
                 } finally {
                     setIsLoading(false);
                 }
@@ -343,10 +340,11 @@
                 }, delay));
 
                 try {
-                    await logIt('Membuat kontainer DNS virtual...', 0);
-                    await logIt('Menyiapkan transfer data aman...', 600);
+                    await logIt('Mempersiapkan jalur DNS aman...', 0);
+                    await logIt('Menyiapkan transfer data...', 600);
 
                     const url = workerUrl.endsWith('/') ? workerUrl.slice(0, -1) : workerUrl;
+                    
                     const response = await fetch(`${url}/publish`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -357,7 +355,7 @@
                     });
 
                     setPublishStep(2);
-                    await logIt('Mengunggah berkas HTML ke Cloudflare Edge...', 500);
+                    await logIt('Mengunggah berkas HTML ke Cloudflare KV...', 500);
 
                     const result = await response.json();
 
@@ -397,10 +395,15 @@
                     </div>
                     <h1 className="text-2xl font-extrabold text-gray-900 mb-3">Mohon Buka di Desktop</h1>
                     <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
-                        SitusKilat AI Pro adalah lingkungan perancangan web kompleks yang memerlukan layar lebar. Silakan akses tautan ini melalui komputer atau laptop Anda.
+                        Lingkungan perancangan web ini memerlukan layar lebar. Silakan akses tautan ini melalui komputer atau laptop Anda.
                     </p>
                 </div>
             );
+
+            // Ekstrak hostname dari worker URL untuk UI
+            const getWorkerDomain = () => {
+                try { return new URL(workerUrl).hostname; } catch (e) { return "domain-anda.com"; }
+            };
 
             return (
                 <React.Fragment>
@@ -443,7 +446,7 @@
                                 </button>
                                 <button 
                                     onClick={() => {
-                                        if (publishedSites.length === 0) return showToast('Terbitkan website Anda terlebih dahulu!', 'info');
+                                        if (publishedSites.length === 0) return showToast('Terbitkan website terlebih dahulu!', 'info');
                                         setViewMode('browser');
                                         setBrowserAddress(publishedSites[0].liveUrl);
                                     }}
@@ -487,11 +490,10 @@
                                         </div>
 
                                         <div className="flex-1 overflow-y-auto p-5 custom-scrollbar space-y-6">
-                                            {/* Error Fallback Banner jika Worker Error */}
                                             {serverStatus === 'failed' && (
                                                 <div className="bg-red-50 text-red-700 p-3 rounded-xl border border-red-100 text-xs font-semibold flex items-start gap-2">
                                                     <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                                    Peringatan: Gagal terkoneksi ke Worker API. Silakan periksa menu pengaturan server.
+                                                    Peringatan: Gagal terkoneksi ke Worker. Silakan periksa menu pengaturan server.
                                                 </div>
                                             )}
 
@@ -598,7 +600,7 @@
                                         </div>
 
                                         <div className="flex-1 relative bg-gray-100 overflow-hidden flex items-center justify-center p-4">
-                                            {/* LAYAR LOADING AI YANG DIPERBAIKI */}
+                                            {/* LAYAR LOADING AI */}
                                             {isLoading && (
                                                 <div className="absolute inset-0 bg-white/85 backdrop-blur-sm z-30 flex flex-col items-center justify-center animate-fadeIn">
                                                     <div className="w-14 h-14 rounded-full border-4 border-indigo-100 border-t-indigo-600 animate-spin mb-5"></div>
@@ -709,9 +711,11 @@
 
                                     {publishStep === 0 ? (
                                         <div className="space-y-5">
-                                            <div className="flex items-center bg-gray-50 border border-gray-200 focus-within:border-indigo-500 rounded-xl px-4 py-3.5 transition">
-                                                <input type="text" placeholder="nama-proyek-web" value={subdomainInput} onChange={(e) => setSubdomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} className="bg-transparent outline-none flex-1 font-bold text-gray-900 text-right pr-2"/>
-                                                <span className="text-indigo-600 font-bold border-l border-gray-300 pl-2">.situskilat.id</span>
+                                            <div className="flex items-center bg-gray-50 border border-gray-200 focus-within:border-indigo-500 rounded-xl px-4 py-3.5 transition overflow-hidden">
+                                                <span className="text-gray-500 font-bold border-r border-gray-200 pr-2 mr-2 whitespace-nowrap hidden sm:inline-block">
+                                                    https://{getWorkerDomain()}/site/
+                                                </span>
+                                                <input type="text" placeholder="nama-proyek-web" value={subdomainInput} onChange={(e) => setSubdomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} className="bg-transparent outline-none flex-1 font-bold text-gray-900"/>
                                             </div>
                                             <div className="flex gap-3">
                                                 <button onClick={() => setShowPublishModal(false)} className="flex-1 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full font-bold transition">Batal</button>
@@ -727,7 +731,7 @@
                                             )}
                                             <h4 className="font-bold text-gray-900 text-lg">{publishStep < 4 ? 'Mengunggah ke Cloudflare KV...' : 'Website Mengudara!'}</h4>
                                             {publishStep === 4 && (
-                                                <button onClick={() => { setShowPublishModal(false); setViewMode('browser'); setBrowserAddress(`https://${new URL(workerUrl).hostname}/site/${subdomainInput}`); }} className="mt-6 w-full py-3.5 bg-gray-900 text-white rounded-full font-bold hover:bg-gray-800 transition">Buka Situs Saya</button>
+                                                <button onClick={() => { setShowPublishModal(false); setViewMode('browser'); setBrowserAddress(`${workerUrl.endsWith('/') ? workerUrl.slice(0, -1) : workerUrl}/site/${subdomainInput}`); }} className="mt-6 w-full py-3.5 bg-gray-900 text-white rounded-full font-bold hover:bg-gray-800 transition">Buka Situs Saya</button>
                                             )}
                                         </div>
                                     )}
