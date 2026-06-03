@@ -293,7 +293,7 @@
                     ? `KODE SAAT INI:\n${generatedCode}\n\nINSTRUKSI REVISI:\n${prompt}\nBerikan seluruh HTML secara lengkap.`
                     : prompt;
 
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${secureApiKey}`;
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${secureApiKey}`;
 
                 try {
                     const data = await fetchWithBackoff(url, {
