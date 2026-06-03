@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SitusKilat AI Pro - AI Website Builder & DNS Gateway</title>
+    <title>SitusKilat AI Pro - AI Website Builder</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- React & ReactDOM CDN (Production) -->
+    <!-- React & ReactDOM CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    
-    <!-- Babel Standalone CDN (Untuk kompilasi JSX langsung di peramban) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Tailwind Configuration & Animations -->
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config & Animations -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
                     animation: {
-                        fadeIn: 'fadeIn 0.2s ease-out forwards',
-                        scaleIn: 'scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                        fadeIn: 'fadeIn 0.25s ease-out forwards',
+                        scaleIn: 'scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
                         slideUp: 'slideUp 0.3s ease-out forwards',
                     },
                     keyframes: {
@@ -44,132 +50,95 @@
         }
     </script>
 
-    <!-- Custom Style Overrides -->
+    <!-- Custom Styles -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            color: #1F2937;
+            background-color: #F9FAFB; /* gray-50 */
         }
-        /* Custom Scrollbar for Terminal & Editor */
+        
+        .text-gradient {
+            background-image: linear-gradient(90deg, #4F46E5, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 3px;
+            background: #cbd5e1;
+            border-radius: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        .dark-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .dark-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        .dark-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #475569;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 overflow-hidden h-screen w-full">
+<body class="overflow-hidden h-screen w-full">
     
-    <!-- React Entry Point -->
     <div id="root"></div>
 
-    <!-- React Application Logic -->
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // ==========================================
-        // 🛡️ SEMATKAN URL CLOUDFLARE WORKER ANDA DI SINI
-        // ==========================================
         const CLOUDFLARE_WORKER_URL = "https://situskilat-auth-bridge.username.workers.dev";
 
-        // Database Templat Rilis Berkualitas Tinggi
         const TEMPLATES = {
             saas: `<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaSaaS - Solusi Kolaborasi Tim Masa Kini</title>
+    <title>LuminaSaaS - Masa Depan Kerja Tim</title>
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden">
-
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-slate-100">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md">
-                    <i class="fa-solid fa-layer-group text-lg"></i>
-                </div>
-                <span class="text-xl font-extrabold tracking-tight text-slate-900">LuminaSaaS</span>
-            </div>
-            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-                <a href="#fitur" class="hover:text-indigo-600 transition">Fitur</a>
-                <a href="#alur" class="hover:text-indigo-600 transition">Solusi</a>
+<body class="bg-white text-gray-900 min-h-screen">
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 py-4 px-6">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <span class="text-xl font-extrabold text-indigo-600">LuminaSaaS</span>
+            <nav class="hidden md:flex gap-6 text-sm font-semibold text-gray-500">
+                <a href="#" class="hover:text-indigo-600">Fitur</a>
+                <a href="#" class="hover:text-indigo-600">Harga</a>
             </nav>
-            <div>
-                <button onclick="alert('Terima kasih telah mencoba demo LuminaSaaS!')" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition shadow-md active:scale-95">Mulai Gratis</button>
-            </div>
+            <button class="bg-gray-900 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-gray-800 transition">Mulai Gratis</button>
         </div>
     </header>
-
-    <section class="relative py-20 md:py-32 overflow-hidden flex-1 bg-gradient-to-b from-indigo-50/50 to-white">
-        <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
-            <span class="px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold inline-block mb-6 tracking-wide uppercase">Rilis Versi 2.0</span>
-            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
-                Kerja Tim Lebih Ringan,<br/>
-                <span class="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Hasil Lebih Maksimal</span>
-            </h1>
-            <p class="text-base md:text-lg text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-                Kelola proyek, komunikasi tim, dan tenggat waktu dalam satu platform terpusat yang intuitif dan aman.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                <a href="#fitur" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-600/20 text-center">Eksplor Fitur</a>
-            </div>
-        </div>
+    <section class="py-24 px-6 text-center max-w-4xl mx-auto">
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-gray-900">Sinkronisasi Tim <span class="text-indigo-600">Tanpa Batas</span></h1>
+        <p class="text-lg text-gray-500 mb-10">Tingkatkan produktivitas perusahaan dengan platform kolaborasi dan analitik paling intuitif di dunia.</p>
+        <button class="bg-indigo-600 text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-indigo-600/30 hover:scale-105 transition transform">Jadwalkan Demo</button>
     </section>
-
-    <section id="fitur" class="py-24 bg-white border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl font-extrabold text-slate-900 mb-4">Mengapa Memilih Kami?</h2>
-                <p class="text-slate-500">Kami merancang setiap komponen demi meningkatkan produktivitas harian tim Anda.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-500/20 transition duration-300">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-6">
-                        <i class="fa-solid fa-chart-line text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-3">Analisis Real-time</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Pantau perkembangan proyek dan performa tim Anda melalui dasbor analitik yang diperbarui setiap detik.</p>
-                </div>
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-500/20 transition duration-300">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-6">
-                        <i class="fa-solid fa-shield-halved text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-3">Keamanan Kelas Militer</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Seluruh data proyek dan berkas perusahaan Anda dienkripsi penuh menggunakan standar keamanan perbankan global.</p>
-                </div>
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-500/20 transition duration-300">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-6">
-                        <i class="fa-solid fa-clock text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-slate-900 mb-3">Pengingat Otomatis</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Dapatkan notifikasi cerdas sebelum tenggat waktu tiba, membantu tim tetap fokus dan tepat waktu.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="border-t border-slate-100 py-10 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-6 text-center text-sm text-slate-400">
-            <p>&copy; 2026 LuminaSaaS. Hak Cipta Dilindungi.</p>
-        </div>
-    </footer>
-
 </body>
 </html>`,
             coffee: `<!DOCTYPE html>
@@ -177,98 +146,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kopi Wangi - Seduhan Istimewa Sejak 1998</title>
+    <title>Kopi Wangi - Seduhan Estetik</title>
     <script src="https://cdn.tailwindcss.com"><\/script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <style>h1, h2 { font-family: 'Playfair Display', serif; } body { font-family: 'Poppins', sans-serif; }</style>
 </head>
-<body class="bg-amber-50/40 text-amber-950 min-h-screen">
-
-    <nav class="border-b border-amber-100 bg-white/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-            <span class="text-xl font-extrabold tracking-wider text-amber-900">KOPI WANGI</span>
-            <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-amber-800">
-                <a href="#menu" class="hover:text-amber-600 transition">Daftar Menu</a>
-            </div>
-            <button class="px-5 py-2.5 bg-amber-800 hover:bg-amber-900 text-white rounded-xl text-xs font-bold uppercase tracking-widest transition">Hubungi Kami</button>
-        </div>
+<body class="bg-stone-50 text-stone-800">
+    <nav class="p-6 max-w-5xl mx-auto flex justify-between items-center">
+        <span class="text-2xl font-extrabold text-stone-900 tracking-widest">KOPI WANGI</span>
+        <button class="border border-stone-800 text-stone-800 px-6 py-2 text-sm font-bold uppercase tracking-widest hover:bg-stone-800 hover:text-white transition">Menu</button>
     </nav>
-
-    <section class="py-20 md:py-32 text-center max-w-4xl mx-auto px-6">
-        <span class="text-xs uppercase tracking-[0.2em] text-amber-700 font-bold block mb-4">Biji Kopi Pilihan Nusantara</span>
-        <h1 class="text-4xl md:text-6xl font-black text-amber-950 mb-6 leading-tight">
-            Menghangatkan Pagi,<br/>
-            <span class="text-amber-700 italic">Menemani Inspirasi</span>
-        </h1>
-        <p class="text-amber-900/70 text-base md:text-lg max-w-lg mx-auto mb-10 leading-relaxed">
-            Menyajikan racikan kopi tradisional dan modern dengan cita rasa otentik tanah air dari barista berpengalaman.
-        </p>
-        <div class="flex justify-center">
-            <a href="#menu" class="bg-amber-800 text-white px-8 py-3.5 rounded-xl text-sm font-bold tracking-wide hover:bg-amber-900 transition shadow-lg shadow-amber-900/10">Lihat Menu Unggulan</a>
-        </div>
+    <section class="py-20 px-6 text-center">
+        <h1 class="text-5xl md:text-7xl font-extrabold mb-6 text-stone-900">Ketenangan di Setiap<br><span class="italic font-light text-stone-500">Tetesan Seduhan</span></h1>
+        <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80" class="mx-auto rounded-2xl shadow-2xl mt-12 w-full max-w-3xl object-cover h-[400px]">
     </section>
-
-    <section id="menu" class="py-20 bg-white border-t border-amber-100">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center mb-12 text-amber-950">Seduhan Favorit</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-amber-50/20 border border-amber-100 rounded-2xl overflow-hidden group hover:shadow-lg transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=500&q=80" class="w-full h-56 object-cover group-hover:scale-105 transition duration-500">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-bold text-amber-950">Wangi Latte</h3>
-                            <span class="text-amber-800 font-extrabold text-sm">Rp 26k</span>
-                        </div>
-                        <p class="text-xs text-amber-900/75 leading-relaxed">Racikan espresso lokal dengan susu segar dan sedikit aroma vanilla bakar khas Nusantara.</p>
-                    </div>
-                </div>
-                <div class="bg-amber-50/20 border border-amber-100 rounded-2xl overflow-hidden group hover:shadow-lg transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=500&q=80" class="w-full h-56 object-cover group-hover:scale-105 transition duration-500">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-lg font-bold text-amber-950">V60 Gayo</h3>
-                            <span class="text-amber-800 font-extrabold text-sm">Rp 28k</span>
-                        </div>
-                        <p class="text-xs text-amber-900/75 leading-relaxed">Metode seduh manual presisi menonjolkan aroma buah-buahan dan bumbu rempah Aceh Gayo.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
 </body>
 </html>`
         };
 
         function App() {
-            // State Antarmuka & Layar
-            const [activeTab, setActiveTab] = useState('preview'); // 'preview' | 'code' | 'logs'
+            // State Inti Layout & Mode
             const [viewMode, setViewMode] = useState('editor'); // 'editor' | 'browser'
+            const [editorTab, setEditorTab] = useState('preview'); // 'preview' | 'code' -> Mengatur tampilan di panel kanan
             const [previewMode, setPreviewMode] = useState('desktop'); // 'desktop' | 'tablet' | 'mobile'
-            const [sidebarOpen, setSidebarOpen] = useState(true);
-            const [showCodeView, setShowCodeView] = useState(true);
-            const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
-            const [showSettingsModal, setShowSettingsModal] = useState(false);
-
-            // State Generator Kode
+            
+            // State Builder Utama
             const [prompt, setPrompt] = useState('');
             const [generatedCode, setGeneratedCode] = useState(TEMPLATES.saas);
             const [isLoading, setIsLoading] = useState(false);
 
-            // State Cloudflare Worker Integration
+            // State Keamanan Server
             const [workerUrl, setWorkerUrl] = useState(() => localStorage.getItem('situs_kilat_worker_url') || CLOUDFLARE_WORKER_URL);
-            const [serverStatus, setServerStatus] = useState('idle'); // 'idle' | 'connected' | 'failed'
+            const [serverStatus, setServerStatus] = useState('idle');
 
-            // State Undo / Redo History
+            // Riwayat Kode
             const [history, setHistory] = useState([TEMPLATES.saas]);
             const [historyIndex, setHistoryIndex] = useState(0);
 
-            // State Go Live / DNS Router
+            // State Modal & Notifikasi
+            const [showSettingsModal, setShowSettingsModal] = useState(false);
             const [showPublishModal, setShowPublishModal] = useState(false);
+            const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+            
+            // State Simulasi DNS
             const [subdomainInput, setSubdomainInput] = useState('');
             const [isPublishing, setIsPublishing] = useState(false);
             const [publishStep, setPublishStep] = useState(0);
@@ -276,22 +196,27 @@
             const [publishedSites, setPublishedSites] = useState([]);
             const [browserAddress, setBrowserAddress] = useState('');
 
-            // Sinkronisasi data saat start
+            // Efek Render Visual (Reveal)
+            useEffect(() => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) entry.target.classList.add('active');
+                    });
+                }, { threshold: 0.1 });
+
+                const revealElements = document.querySelectorAll('.reveal');
+                revealElements.forEach(el => observer.observe(el));
+
+                return () => revealElements.forEach(el => observer.unobserve(el));
+            }, [viewMode, editorTab]);
+
+            // Inisialisasi awal
             useEffect(() => {
                 localStorage.setItem('situs_kilat_worker_url', workerUrl);
-            }, [workerUrl]);
-
-            useEffect(() => {
                 const savedSites = localStorage.getItem('situs_kilat_published_sites');
-                if (savedSites) {
-                    try {
-                        setPublishedSites(JSON.parse(savedSites));
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
+                if (savedSites) setPublishedSites(JSON.parse(savedSites));
                 testWorkerConnection();
-            }, []);
+            }, [workerUrl]);
 
             const showToast = (message, type = 'success') => {
                 setToast({ show: true, message, type });
@@ -302,11 +227,7 @@
                 setServerStatus('idle');
                 try {
                     const response = await fetch(workerUrl, { method: "GET" });
-                    if (response.ok) {
-                        setServerStatus('connected');
-                    } else {
-                        setServerStatus('failed');
-                    }
+                    setServerStatus(response.ok ? 'connected' : 'failed');
                 } catch (e) {
                     setServerStatus('failed');
                 }
@@ -315,9 +236,7 @@
             const fetchApiKeyFromWorker = async () => {
                 try {
                     const response = await fetch(workerUrl, { method: "GET" });
-                    if (!response.ok) {
-                        throw new Error(`Worker HTTP error: ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`Worker HTTP error: ${response.status}`);
                     const data = await response.json();
                     if (data && data.success && data.apiKey) {
                         setServerStatus('connected');
@@ -326,7 +245,7 @@
                     throw new Error(data.error || "Skema respon JSON salah.");
                 } catch (err) {
                     setServerStatus('failed');
-                    throw new Error(`Gagal menarik kunci dari Worker: ${err.message}`);
+                    throw new Error(`Gagal menarik kunci: ${err.message}`);
                 }
             };
 
@@ -342,7 +261,6 @@
                 if (historyIndex > 0) {
                     setHistoryIndex(historyIndex - 1);
                     setGeneratedCode(history[historyIndex - 1]);
-                    showToast('Perubahan dibatalkan', 'info');
                 }
             };
 
@@ -350,17 +268,13 @@
                 if (historyIndex < history.length - 1) {
                     setHistoryIndex(historyIndex + 1);
                     setGeneratedCode(history[historyIndex + 1]);
-                    showToast('Mengulangi perubahan', 'info');
                 }
             };
 
             const fetchWithBackoff = async (url, options, retries = 5, delay = 1000) => {
                 try {
                     const response = await fetch(url, options);
-                    if (!response.ok) {
-                        const errData = await response.json().catch(() => ({}));
-                        throw new Error(errData.error?.message || `HTTP error! status: ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     return await response.json();
                 } catch (error) {
                     if (retries === 0) throw error;
@@ -370,917 +284,434 @@
             };
 
             const handleAiGeneration = async (isEdit = false) => {
-                if (!prompt.trim()) {
-                    showToast('Masukkan instruksi Anda terlebih dahulu!', 'error');
-                    return;
-                }
+                if (!prompt.trim()) return showToast('Masukkan instruksi Anda!', 'error');
 
                 setIsLoading(true);
                 setViewMode('editor');
-                setActiveTab('preview');
+                setEditorTab('preview'); // Kembalikan ke panel preview saat AI memproses
 
                 let secureApiKey = "";
                 try {
                     secureApiKey = await fetchApiKeyFromWorker();
                 } catch (err) {
-                    console.error(err);
                     setIsLoading(false);
-                    showToast("API Key gagal ditarik dari Cloudflare Worker.", "error");
+                    showToast("API Key gagal ditarik dari Cloudflare.", "error");
                     setShowSettingsModal(true);
                     return;
                 }
 
                 const systemPrompt = isEdit
-                    ? `Anda adalah "SitusKilat AI Pro", robot perancang web berbasis AI. Tugas Anda adalah memodifikasi kode HTML yang disediakan berdasarkan instruksi revisi dari pengguna.
-                      Aturan Modifikasi:
-                      1. Terima kode HTML yang ada saat ini dan lakukan perubahan spesifik sesuai instruksi pengguna secara estetik, modern, cerah & presisi.
-                      2. Pertahankan gaya, tema warna, struktur, dan konten yang sudah bagus, kecuali jika diminta untuk diubah atau diganti.
-                      3. Jangan pernah merusak tautan CDN Tailwind CSS atau FontAwesome di dalam tag <head>.
-                      4. Pastikan hasil akhir tetap berupa halaman HTML lengkap (mengandung <!DOCTYPE html>, <html>, <head>, <body>) mandiri yang valid.
-                      5. Anda dibolehkan menulis script interaksi Vanilla JS di dalam tag <script> jika diperlukan.
-                      6. JANGAN berikan penjelasan apapun di luar kode HTML. Jangan gunakan blok markdown \`\`\`html atau \`\`\`. Kembalikan hanya kode HTML murni utuh.`
-                    : `Anda adalah "SitusKilat AI Pro", robot perancang website satu halaman (Single Page) super kreatif, modern, cerah, mewah, dan mahir Tailwind CSS.
-                      Keluarkan HANYO kode HTML5 mandiri yang valid dan lengkap.
-                      Aturan Pembuatan:
-                      1. Desain harus modern, bersih (light theme dominan putih/slate-50), dengan whitespace seimbang, palet warna indah, tipografi jelas, dan responsif.
-                      2. Selalu sertakan CDN Tailwind CSS: <script src="https://cdn.tailwindcss.com"><\/script>
-                      3. Selalu sertakan CDN FontAwesome untuk ikon: <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                      4. Gunakan gambar beresolusi tinggi yang relevan dari Unsplash untuk menghidupkan visual konten. Jangan pakai placeholder warna abu-abu polos.
-                      5. Tambahkan interaksi sederhana (seperti toggle menu mobile, tab, galeri filter, accordion FAQ) dengan Vanilla JS langsung di dalam tag <script> di HTML tersebut.
-                      6. JANGAN berikan penjelasan, komentar penjelasan eksternal, atau pembungkus markdown seperti \`\`\`html atau \`\`\`. Keluarkan hanya kode HTML mentah dari awal sampai akhir.`;
+                    ? `Anda adalah AI perancang web tingkat lanjut. Modifikasi kode HTML berikut sesuai instruksi. 
+                      Pertahankan gaya modern dan responsif. Berikan HANYA kode HTML mentah yang utuh.`
+                    : `Anda adalah AI perancang web satu halaman (Single Page) modern menggunakan Tailwind CSS. 
+                      Keluarkan HANYA kode HTML5 mandiri yang valid dan utuh tanpa bungkus markdown. 
+                      Desain harus terang, bersih, mewah dengan whitespace lega dan font Google 'Plus Jakarta Sans' atau 'Poppins'. Gunakan aset Unsplash berkualitas tinggi.`;
 
                 const userPromptText = isEdit
-                    ? `KODE HTML AKTIF:
-                      <!-- START CODE -->
-                      ${generatedCode}
-                      <!-- END CODE -->
-                      REVISI PENGGUNA:
-                      ${prompt}
-                      Lakukan perubahan sesuai instruksi di atas dan berikan seluruh kode HTML yang baru secara lengkap.`
+                    ? `KODE SAAT INI:\n${generatedCode}\n\nINSTRUKSI REVISI:\n${prompt}\nBerikan seluruh HTML secara lengkap.`
                     : prompt;
 
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${secureApiKey}`;
-
-                const payload = {
-                    contents: [{ parts: [{ text: userPromptText }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
-                };
 
                 try {
                     const data = await fetchWithBackoff(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: userPromptText }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        })
                     });
 
                     let rawHtml = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                    if (!rawHtml) {
-                        throw new Error('Gagal menerima respons dari server AI.');
-                    }
+                    if (!rawHtml) throw new Error('Respons AI kosong.');
 
                     let cleanedCode = rawHtml.trim();
-                    if (cleanedCode.includes('```html')) {
-                        cleanedCode = cleanedCode.split('```html')[1].split('```')[0];
-                    } else if (cleanedCode.includes('```')) {
-                        cleanedCode = cleanedCode.split('```')[1].split('```')[0];
-                    }
-                    cleanedCode = cleanedCode.trim();
-
-                    updateCodeWithHistory(cleanedCode);
+                    if (cleanedCode.includes('```html')) cleanedCode = cleanedCode.split('```html')[1].split('```')[0];
+                    else if (cleanedCode.includes('```')) cleanedCode = cleanedCode.split('```')[1].split('```')[0];
+                    
+                    updateCodeWithHistory(cleanedCode.trim());
                     setPrompt('');
-                    showToast('Website Anda berhasil diperbarui oleh AI!', 'success');
+                    showToast('Website berhasil dirancang!', 'success');
                 } catch (error) {
-                    console.error(error);
-                    showToast(`Gagal memproses AI: ${error.message}`, 'error');
+                    showToast(`Gagal memproses: ${error.message}`, 'error');
                 } finally {
                     setIsLoading(false);
                 }
             };
 
             const executePublishFlow = () => {
-                if (!subdomainInput.trim()) {
-                    showToast('Tentukan nama subdomain terlebih dahulu!', 'error');
-                    return;
-                }
-
+                if (!subdomainInput.trim()) return showToast('Tentukan nama subdomain!', 'error');
                 const cleanSubdomain = subdomainInput.toLowerCase().replace(/[^a-z0-9-]/g, '');
-                if (publishedSites.some(site => site.subdomain === cleanSubdomain)) {
-                    showToast('Subdomain ini sudah digunakan!', 'error');
-                    return;
-                }
+                if (publishedSites.some(s => s.subdomain === cleanSubdomain)) return showToast('Subdomain telah digunakan!', 'error');
 
                 setIsPublishing(true);
                 setPublishStep(1);
                 setTerminalLogs([]);
 
-                const logToTerminal = (text, delay) => {
-                    return new Promise((resolve) => {
-                        setTimeout(() => {
-                            setTerminalLogs(prev => [...prev, `[Deployment Service] ${text}`]);
-                            resolve();
-                        }, delay);
-                    });
-                };
+                const logIt = (text, delay) => new Promise(r => setTimeout(() => {
+                    setTerminalLogs(prev => [...prev, `> ${text}`]);
+                    r();
+                }, delay));
 
-                logToTerminal('Membuat kontainer deployment virtual...', 0)
-                    .then(() => logToTerminal('Memeriksa kelengkapan file index.html...', 900))
-                    .then(() => { setPublishStep(2); return logToTerminal('Mengunggah aset ke Edge CDN Server...', 1200); })
-                    .then(() => logToTerminal('Mendaftarkan routing DNS wildcard (*)...', 800))
-                    .then(() => { setPublishStep(3); return logToTerminal(`Mengonfigurasi rute SSL pada: ${cleanSubdomain}.situskilat.id`, 1000); })
-                    .then(() => logToTerminal('Menyiapkan enkripsi HTTPS (Let\'s Encrypt SSL)...', 900))
-                    .then(() => { setPublishStep(4); return logToTerminal('Situs berhasil disiarkan secara global!', 800); })
+                logIt('Membuat DNS Record virtual...', 0)
+                    .then(() => logIt('Mengekspor file index.html...', 800))
+                    .then(() => { setPublishStep(2); return logIt('Menyebarkan ke node CDN Global...', 1000); })
+                    .then(() => { setPublishStep(3); return logIt('Menerbitkan sertifikat SSL Let\'s Encrypt...', 900); })
+                    .then(() => { setPublishStep(4); return logIt('Subdomain berhasil diluncurkan!', 600); })
                     .then(() => {
-                        const newSite = {
+                        const newSites = [{
                             subdomain: cleanSubdomain,
                             code: generatedCode,
-                            title: getTitleFromHtml(generatedCode) || 'Situs Kilat Baru',
-                            publishedAt: new Date().toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                        };
-                        const updated = [newSite, ...publishedSites];
-                        savePublishedSites(updated);
+                            title: generatedCode.match(/<title>([^<]*)<\/title>/i)?.[1] || 'Situs Baru'
+                        }, ...publishedSites];
+                        setPublishedSites(newSites);
+                        localStorage.setItem('situs_kilat_published_sites', JSON.stringify(newSites));
                         setIsPublishing(false);
-                        showToast('Situs Anda kini resmi live di browser virtual!', 'success');
+                        showToast('Website berhasil Go Live!', 'success');
                     });
             };
 
-            const getTitleFromHtml = (htmlStr) => {
-                const match = htmlStr.match(/<title>([^<]*)<\/title>/i);
-                return match ? match[1] : '';
-            };
-
-            const navigateToVirtualUrl = (url) => {
-                setViewMode('browser');
-                setBrowserAddress(url);
-                setShowPublishModal(false);
-            };
-
-            const handleDeleteSite = (subdomain, e) => {
-                e.stopPropagation();
-                const filtered = publishedSites.filter(site => site.subdomain !== subdomain);
-                savePublishedSites(filtered);
-                showToast(`Situs ${subdomain}.situskilat.id telah dihapus!`, 'info');
-            };
-
-            const handleCopyCode = () => {
-                const tempTextArea = document.createElement('textarea');
-                tempTextArea.value = generatedCode;
-                document.body.appendChild(tempTextArea);
-                tempTextArea.select();
-                try {
-                    document.execCommand('copy');
-                    showToast('Kode HTML berhasil disalin ke clipboard!');
-                } catch (err) {
-                    showToast('Gagal menyalin kode.', 'error');
-                }
-                document.body.removeChild(tempTextArea);
-            };
-
-            const handleDownloadCode = () => {
-                const blob = new Blob([generatedCode], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'index.html';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                showToast('File index.html berhasil diunduh!');
-            };
-
-            const getHtmlForBrowser = () => {
-                if (!browserAddress) return '';
-                const cleanSub = browserAddress.replace('https://', '').replace('.situskilat.id', '').trim();
-                const site = publishedSites.find(s => s.subdomain === cleanSub);
-                if (site) {
-                    return site.code;
-                }
-                return `<!DOCTYPE html>
-                <html lang="id">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Situs Tidak Ditemukan</title>
-                    <script src="https://cdn.tailwindcss.com"><\/script>
-                </head>
-                <body class="bg-slate-50 text-slate-800 flex items-center justify-center min-h-screen font-sans">
-                    <div class="text-center max-w-sm p-8 border border-slate-200 rounded-3xl bg-white shadow-xl">
-                        <div class="w-16 h-16 rounded-full bg-red-100 text-red-500 flex items-center justify-center mx-auto mb-6">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        </div>
-                        <h1 class="text-2xl font-extrabold text-slate-900 mb-2">404 - Tidak Ditemukan</h1>
-                        <p class="text-sm text-slate-500 mb-6">Subdomain <span class="font-bold text-indigo-600">\${browserAddress}</span> belum terdaftar di perutean DNS.</p>
-                        <div class="text-xs text-slate-400">Silakan kembali ke editor dan ketuk <span class="font-bold">Go Live</span>.</div>
+            // TAMPILAN BLOKIR UNTUK MOBILE (Hanya Desktop)
+            const MobileBlocker = () => (
+                <div className="flex lg:hidden fixed inset-0 z-[9999] bg-white flex-col items-center justify-center p-8 text-center">
+                    <div className="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center mb-6">
+                        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
-                </body>
-                </html>`;
-            };
+                    <h1 className="text-2xl font-extrabold text-gray-900 mb-3">Mohon Buka di Desktop</h1>
+                    <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
+                        SitusKilat AI Pro adalah lingkungan perancangan web kompleks yang memerlukan layar lebar. Silakan akses tautan ini melalui komputer atau laptop Anda.
+                    </p>
+                </div>
+            );
 
             return (
-                <div className="flex flex-col h-screen w-full bg-slate-50 text-slate-800 overflow-hidden font-sans">
+                <React.Fragment>
+                    <MobileBlocker />
                     
-                    {/* App Header */}
-                    <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200 z-20 shadow-sm">
-                        <div className="flex items-center gap-3">
-                            <button 
-                                onClick={() => setSidebarOpen(!sidebarOpen)}
-                                className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-50 rounded-xl hidden md:block transition"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                            </button>
-                            <div className="flex items-center gap-2">
-                                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20">
+                    {/* Aplikasi Utama (Tersembunyi di Mobile, Muncul di LG ke atas) */}
+                    <div className="hidden lg:flex flex-col h-screen w-full bg-gray-50 overflow-hidden font-sans">
+                        
+                        {/* Notifikasi Toast */}
+                        {toast.show && (
+                            <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl transition-all border text-sm animate-fadeIn \${
+                                toast.type === 'success' ? 'bg-white border-green-100 text-green-700' :
+                                toast.type === 'error' ? 'bg-white border-red-100 text-red-700' : 'bg-white border-indigo-100 text-indigo-700'
+                            }`}>
+                                <p className="font-semibold">{toast.message}</p>
+                            </div>
+                        )}
+
+                        {/* Top Header Menempel */}
+                        <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-lg border-b border-gray-200 flex items-center justify-between px-6 py-4 shadow-sm">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                 </div>
                                 <div>
-                                    <span className="text-base font-extrabold tracking-tight text-slate-900">SitusKilat <span className="text-indigo-600 font-black">AI Pro</span></span>
-                                    <span className="hidden sm:inline-block text-[9px] font-black uppercase tracking-wider text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md ml-2.5">GitHub & Cloudflare Secured</span>
+                                    <span className="text-lg font-extrabold tracking-tight text-gray-900">
+                                        SitusKilat <span className="text-gradient">AI Pro</span>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Connection Status */}
-                        <div 
-                            onClick={() => setShowSettingsModal(true)}
-                            className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-full border border-slate-200 text-xs font-semibold cursor-pointer hover:bg-slate-200/60 transition"
-                        >
-                            <span className={`w-2 h-2 rounded-full \${
-                                serverStatus === 'connected' ? 'bg-emerald-500 animate-pulse' :
-                                serverStatus === 'fetching' ? 'bg-amber-500 animate-ping' : 'bg-rose-500'
-                            }`}></span>
-                            <span className="text-slate-600">
-                                {serverStatus === 'connected' ? 'Secure Gateway Terhubung' : 'Secure Gateway Terputus'}
-                            </span>
-                        </div>
-
-                        {/* View Switcher */}
-                        <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
-                            <button 
-                                onClick={() => setViewMode('editor')}
-                                className={`px-4 py-2 rounded-xl flex items-center gap-2 text-xs font-bold transition duration-200 \${viewMode === 'editor' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                Editor Kreatif
-                            </button>
-                            <button 
-                                onClick={() => {
-                                    if (publishedSites.length === 0) {
-                                        showToast('Terbitkan website Anda terlebih dahulu!', 'info');
-                                        return;
-                                    }
-                                    setViewMode('browser');
-                                    setBrowserAddress(`https://\${publishedSites[0].subdomain}.situskilat.id`);
-                                }}
-                                className={`px-4 py-2 rounded-xl flex items-center gap-2 text-xs font-bold transition duration-200 \${viewMode === 'browser' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/10' : 'text-slate-500 hover:text-slate-900'}`}
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                                Situs Aktif ({publishedSites.length})
-                            </button>
-                        </div>
-
-                        {/* Top Right Controls */}
-                        <div className="flex items-center gap-2.5">
-                            {/* Undo / Redo */}
-                            <div className="hidden md:flex items-center bg-slate-100 p-1 rounded-xl gap-0.5 border border-slate-200">
-                                <button
-                                    onClick={handleUndo}
-                                    disabled={historyIndex === 0}
-                                    className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-white rounded-lg disabled:opacity-30 transition"
+                            {/* View Switcher (Editor vs Situs Live) */}
+                            <div className="flex items-center bg-gray-100 p-1.5 rounded-xl border border-gray-200">
+                                <button 
+                                    onClick={() => setViewMode('editor')}
+                                    className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold transition-all duration-200 \${viewMode === 'editor' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
                                 >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg>
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    Ruang Kerja
                                 </button>
-                                <button
-                                    onClick={handleRedo}
-                                    disabled={historyIndex >= history.length - 1}
-                                    className="p-1.5 text-slate-500 hover:text-indigo-600 hover:bg-white rounded-lg disabled:opacity-30 transition"
+                                <button 
+                                    onClick={() => {
+                                        if (publishedSites.length === 0) return showToast('Terbitkan website terlebih dahulu!', 'info');
+                                        setViewMode('browser');
+                                        setBrowserAddress(`https://\${publishedSites[0].subdomain}.situskilat.id`);
+                                    }}
+                                    className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-semibold transition-all duration-200 \${viewMode === 'browser' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
                                 >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M11.934 12.8a1 1 0 000-1.6l-5.334-4A1 1 0 005 8v8a1 1 0 001.6.8l5.334-4z"></path></svg>
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                                    Website Live
                                 </button>
                             </div>
 
-                            {/* Settings Button */}
-                            <button 
-                                onClick={() => setShowSettingsModal(true)}
-                                className="p-2.5 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-xl border border-slate-200/80 transition flex items-center gap-1.5 animate-pulse"
-                            >
-                                <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                <span className="hidden md:inline text-xs font-bold">Gerbang Server</span>
-                            </button>
+                            <div className="flex items-center gap-3">
+                                <button onClick={() => setShowSettingsModal(true)} className="p-2.5 text-gray-500 hover:text-indigo-600 hover:bg-gray-100 rounded-xl transition" title="Pengaturan Server">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </button>
+                                <button 
+                                    onClick={() => { setSubdomainInput(''); setPublishStep(0); setShowPublishModal(true); }}
+                                    className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-full text-sm font-bold shadow-lg shadow-blue-500/30 transform hover:scale-105 hover:opacity-90 transition-all flex items-center gap-2"
+                                >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                                    Go Live
+                                </button>
+                            </div>
+                        </header>
 
-                            {/* Go Live Action */}
-                            <button 
-                                onClick={() => {
-                                    setSubdomainInput('');
-                                    setPublishStep(0);
-                                    setShowPublishModal(true);
-                                }}
-                                className="px-4.5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-indigo-600/10 active:scale-95"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                                <span>Go Live</span>
-                            </button>
-                        </div>
-                    </header>
-
-                    {/* Main Workspace Frame */}
-                    <div className="flex flex-1 w-full overflow-hidden relative">
-                        {viewMode === 'editor' && (
-                            <>
-                                {/* Sidebar Control Panel */}
-                                <aside className={`\${sidebarOpen ? 'w-full md:w-[360px] flex' : 'w-0 hidden'} flex-col bg-white border-r border-slate-200 flex-shrink-0 transition-all duration-300 z-10 \${
-                                    activeTab === 'preview' ? 'hidden md:flex' : 'flex'
-                                }`}>
-                                    <div className="flex-1 overflow-y-auto p-5 space-y-5">
-                                        {/* Guide Card */}
-                                        <div className="bg-gradient-to-tr from-emerald-50 to-teal-50/40 rounded-2xl p-4 border border-emerald-100 shadow-sm">
-                                            <h4 className="text-xs font-bold text-emerald-950 mb-1 flex items-center gap-1.5">
-                                                <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                                                Sistem Gateway Cloudflare
-                                            </h4>
-                                            <p className="text-[11px] text-emerald-950/80 leading-relaxed font-medium">
-                                                Kunci API ditarik dengan aman dari Cloudflare Worker. Sistem melakukan validasi asal domain secara otomatis.
-                                            </p>
+                        {/* Ruang Kerja 2 Kolom (Tidak Padat) */}
+                        <div className="flex flex-1 overflow-hidden p-5 gap-5">
+                            
+                            {viewMode === 'editor' && (
+                                <React.Fragment>
+                                    {/* Kolom Kiri: AI & Kontrol (Lebar Tetap) */}
+                                    <aside className="w-[420px] bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col flex-shrink-0 overflow-hidden">
+                                        <div className="p-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                                            <h3 className="font-bold text-gray-900">Perancang AI</h3>
+                                            <div className="flex gap-1">
+                                                <button onClick={handleUndo} disabled={historyIndex === 0} className="p-1.5 text-gray-500 hover:text-indigo-600 bg-white border border-gray-200 rounded disabled:opacity-30"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4z"></path></svg></button>
+                                                <button onClick={handleRedo} disabled={historyIndex >= history.length - 1} className="p-1.5 text-gray-500 hover:text-indigo-600 bg-white border border-gray-200 rounded disabled:opacity-30"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.934 12.8a1 1 0 000-1.6l-5.334-4A1 1 0 005 8v8a1 1 0 001.6.8l5.334-4z"></path></svg></button>
+                                            </div>
                                         </div>
 
-                                        {/* Prompt Area */}
-                                        <div className="space-y-3.5 bg-slate-50 p-4 rounded-2xl border border-slate-200/70">
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-xs font-extrabold text-indigo-700 uppercase tracking-wider flex items-center gap-1.5">
-                                                    <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
-                                                    Asisten Website AI
-                                                </span>
-                                                <span className="text-[9px] bg-indigo-50 text-indigo-600 border border-indigo-100 px-1.5 py-0.5 rounded font-mono font-bold">2.5 Flash</span>
-                                            </div>
+                                        <div className="flex-1 overflow-y-auto p-5 custom-scrollbar space-y-6">
+                                            
+                                            {/* AI Prompt Input */}
+                                            <div className="space-y-3">
+                                                <div className="relative">
+                                                    <textarea
+                                                        value={prompt}
+                                                        onChange={(e) => setPrompt(e.target.value)}
+                                                        placeholder="Jelaskan desain web impian Anda dengan detail di sini..."
+                                                        className="w-full bg-gray-50 border border-gray-200 focus:border-indigo-500 focus:bg-white rounded-xl p-4 text-sm text-gray-800 focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all duration-200 resize-none h-40 leading-relaxed shadow-inner"
+                                                        disabled={isLoading}
+                                                    />
+                                                </div>
+                                                
+                                                <div className="flex flex-wrap gap-2">
+                                                    <button onClick={() => setPrompt(prev => prev + " dengan palet warna putih minimalis, bersih, elegan.")} className="px-3 py-1.5 text-xs bg-gray-50 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 rounded-lg border border-gray-200 transition">🌿 Minimalis</button>
+                                                    <button onClick={() => setPrompt(prev => prev + " dengan palet gelap (dark mode), neon biru dan ungu.")} className="px-3 py-1.5 text-xs bg-gray-50 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 rounded-lg border border-gray-200 transition">🌙 Dark Mode</button>
+                                                    <button onClick={() => setPrompt(prev => prev + " tambahkan animasi hover yang smooth dan desain kartu modern.")} className="px-3 py-1.5 text-xs bg-gray-50 hover:bg-indigo-50 text-gray-600 hover:text-indigo-600 rounded-lg border border-gray-200 transition">✨ Dinamis</button>
+                                                </div>
 
-                                            <div className="relative">
-                                                <textarea
-                                                    value={prompt}
-                                                    onChange={(e) => setPrompt(e.target.value)}
-                                                    placeholder="Contoh: Landing page studio arsitek minimalis dominan warna abu-abu monokrom, navigasi melayang, dan galeri galeri grid berbingkai halus..."
-                                                    className="w-full bg-white border border-slate-200 hover:border-slate-300 focus:border-indigo-500 rounded-xl p-3 text-xs text-slate-800 placeholder-slate-400 focus:ring-4 focus:ring-indigo-100/50 transition resize-none h-32 leading-relaxed"
-                                                    disabled={isLoading}
-                                                />
-                                            </div>
-
-                                            {/* Style presets */}
-                                            <div className="space-y-1.5">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Gaya Cepat Sekali Sentuh:</span>
-                                                <div className="flex flex-wrap gap-1">
-                                                    <button 
-                                                        onClick={() => setPrompt(prev => prev + " dengan tema warna dominan putih bersih, modern, minimalis, dan berkelas.")}
-                                                        className="px-2 py-1 text-[10px] bg-white hover:bg-slate-100 text-slate-600 rounded-lg border border-slate-200 transition active:scale-95"
-                                                    >
-                                                        🌿 Putih Bersih
+                                                <div className="grid grid-cols-2 gap-3 pt-2">
+                                                    <button onClick={() => handleAiGeneration(false)} disabled={isLoading} className="py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition flex items-center justify-center gap-2">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg> Buat Baru
                                                     </button>
-                                                    <button 
-                                                        onClick={() => setPrompt(prev => prev + " dengan warna retro pastel yang hangat, ramah, dan bersahabat.")}
-                                                        className="px-2 py-1 text-[10px] bg-white hover:bg-slate-100 text-slate-600 rounded-lg border border-slate-200 transition active:scale-95"
-                                                    >
-                                                        🎨 Pastel Retro
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => setPrompt(prev => prev + " tambahkan komponen formulir kontak di bawah, interaksi tombol hover, serta faq accordion interaktif.")}
-                                                        className="px-2 py-1 text-[10px] bg-white hover:bg-slate-100 text-slate-600 rounded-lg border border-slate-200 transition active:scale-95"
-                                                    >
-                                                        ⚡ Interaktif
+                                                    <button onClick={() => handleAiGeneration(true)} disabled={isLoading} className="py-3 bg-white border border-gray-200 text-indigo-600 hover:bg-gray-50 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg> Edit Area
                                                     </button>
                                                 </div>
                                             </div>
 
-                                            {/* Execution Buttons */}
-                                            <div className="grid grid-cols-2 gap-2 pt-1.5">
-                                                <button
-                                                    onClick={() => handleAiGeneration(false)}
-                                                    disabled={isLoading}
-                                                    className="py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/10 active:scale-95"
-                                                >
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" /></svg>
-                                                    Desain Baru
-                                                </button>
-                                                <button
-                                                    onClick={() => handleAiGeneration(true)}
-                                                    disabled={isLoading}
-                                                    className="py-2.5 bg-violet-600 hover:bg-violet-700 disabled:bg-violet-400 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md shadow-violet-600/10 active:scale-95"
-                                                >
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
-                                                    Ubah Kode
-                                                </button>
-                                            </div>
-                                        </div>
+                                            <hr className="border-gray-100" />
 
-                                        {/* Templates */}
-                                        <div className="space-y-2.5">
-                                            <span className="text-xs font-black uppercase tracking-wider text-slate-400 block">Mulai Dengan Templat Dasar</span>
-                                            <div className="grid grid-cols-1 gap-2">
-                                                <button 
-                                                    onClick={() => {
-                                                        updateCodeWithHistory(TEMPLATES.saas);
-                                                        showToast('Memuat templat LuminaSaaS');
-                                                    }}
-                                                    className="p-3 bg-slate-50 hover:bg-indigo-50/40 border border-slate-200 hover:border-indigo-200 rounded-xl flex items-center gap-3 text-left transition group"
-                                                >
-                                                    <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition duration-200">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                                                    </div>
-                                                    <div>
-                                                        <h5 className="text-xs font-bold text-slate-800">LuminaSaaS Corporate</h5>
-                                                        <p className="text-[10px] text-slate-400 mt-0.5">Sempurna untuk produk digital & agensi</p>
-                                                    </div>
-                                                </button>
-
-                                                <button 
-                                                    onClick={() => {
-                                                        updateCodeWithHistory(TEMPLATES.coffee);
-                                                        showToast('Memuat templat Kopi Wangi');
-                                                    }}
-                                                    className="p-3 bg-slate-50 hover:bg-amber-50/40 border border-slate-200 hover:border-amber-200 rounded-xl flex items-center gap-3 text-left transition group"
-                                                >
-                                                    <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center group-hover:bg-amber-800 group-hover:text-white transition duration-200">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                                    </div>
-                                                    <div>
-                                                        <h5 className="text-xs font-bold text-slate-800">Kopi Wangi (Café Bistro)</h5>
-                                                        <p className="text-[10px] text-slate-400 mt-0.5">Layout estetis, hangat, dan berkelas</p>
-                                                    </div>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* Published Subdomains */}
-                                        <div className="space-y-2 pt-1">
-                                            <span className="text-xs font-black uppercase tracking-wider text-slate-400 block">Daftar Subdomain Terbit</span>
-                                            {publishedSites.length === 0 ? (
-                                                <div className="text-center py-4 bg-slate-50 border border-slate-200 border-dashed rounded-xl">
-                                                    <p className="text-[10px] text-slate-400 font-medium">Belum ada subdomain yang aktif.</p>
-                                                </div>
-                                            ) : (
-                                                <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
-                                                    {publishedSites.map((site) => (
-                                                        <div 
-                                                            key={site.subdomain}
-                                                            onClick={() => navigateToVirtualUrl(`https://\${site.subdomain}.situskilat.id`)}
-                                                            className="px-3 py-2 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 rounded-xl flex items-center justify-between text-left transition cursor-pointer group"
-                                                        >
-                                                            <div className="overflow-hidden pr-2">
-                                                                <h6 className="text-[11px] font-bold text-slate-800 truncate">{site.title}</h6>
-                                                                <p className="text-[9px] text-indigo-600 font-mono truncate">{site.subdomain}.situskilat.id</p>
-                                                            </div>
-                                                            <button 
-                                                                onClick={(e) => handleDeleteSite(site.subdomain, e)}
-                                                                className="text-slate-400 hover:text-red-500 p-1 rounded hover:bg-red-50 transition flex-shrink-0"
-                                                            >
-                                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                                            </button>
+                                            {/* Templates List */}
+                                            <div className="space-y-3">
+                                                <h4 className="text-sm font-bold text-gray-900">Templat Dasar</h4>
+                                                <div className="space-y-2">
+                                                    <button onClick={() => updateCodeWithHistory(TEMPLATES.saas)} className="w-full p-4 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl flex items-center gap-4 text-left transition group">
+                                                        <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                                                         </div>
-                                                    ))}
+                                                        <div>
+                                                            <h5 className="font-semibold text-gray-900 text-sm">Corporate SaaS</h5>
+                                                            <p className="text-xs text-gray-500">Startup & Agensi</p>
+                                                        </div>
+                                                    </button>
+                                                    <button onClick={() => updateCodeWithHistory(TEMPLATES.coffee)} className="w-full p-4 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl flex items-center gap-4 text-left transition group">
+                                                        <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                                        </div>
+                                                        <div>
+                                                            <h5 className="font-semibold text-gray-900 text-sm">Café Bistro</h5>
+                                                            <p className="text-xs text-gray-500">Elegan & Hangat</p>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </aside>
+
+                                    {/* Kolom Kanan: Canvas Pratinjau & Kode (Lebar Fleksibel) */}
+                                    <main className="flex-1 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col overflow-hidden relative">
+                                        {/* Canvas Header & Toggles */}
+                                        <div className="px-5 py-3 border-b border-gray-200 flex items-center justify-between bg-gray-50/50">
+                                            
+                                            {/* Tab: Pratinjau vs Kode */}
+                                            <div className="flex items-center bg-gray-200/60 p-1 rounded-lg">
+                                                <button 
+                                                    onClick={() => setEditorTab('preview')}
+                                                    className={`px-5 py-1.5 rounded-md text-sm font-semibold transition-all \${editorTab === 'preview' ? 'bg-white text-indigo-600 shadow' : 'text-gray-500 hover:text-gray-900'}`}
+                                                >
+                                                    Visual
+                                                </button>
+                                                <button 
+                                                    onClick={() => setEditorTab('code')}
+                                                    className={`px-5 py-1.5 rounded-md text-sm font-semibold transition-all \${editorTab === 'code' ? 'bg-white text-indigo-600 shadow' : 'text-gray-500 hover:text-gray-900'}`}
+                                                >
+                                                    Kode Sumber
+                                                </button>
+                                            </div>
+
+                                            <div className="flex items-center gap-3">
+                                                {/* Device Switcher (Hanya saat mode preview) */}
+                                                {editorTab === 'preview' && (
+                                                    <div className="flex items-center gap-1">
+                                                        <button onClick={() => setPreviewMode('desktop')} className={`p-2 rounded-lg transition \${previewMode === 'desktop' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></button>
+                                                        <button onClick={() => setPreviewMode('tablet')} className={`p-2 rounded-lg transition \${previewMode === 'tablet' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></button>
+                                                        <button onClick={() => setPreviewMode('mobile')} className={`p-2 rounded-lg transition \${previewMode === 'mobile' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400 hover:text-gray-700'}`}><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg></button>
+                                                    </div>
+                                                )}
+
+                                                <div className="w-px h-6 bg-gray-200"></div>
+
+                                                <button onClick={() => {
+                                                    const blob = new Blob([generatedCode], { type: 'text/html' });
+                                                    const a = document.createElement('a');
+                                                    a.href = URL.createObjectURL(blob);
+                                                    a.download = 'index.html';
+                                                    a.click();
+                                                    showToast('File diunduh');
+                                                }} className="text-gray-500 hover:text-indigo-600 font-semibold text-sm flex items-center gap-1.5 transition">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                                    Unduh
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Canvas Area Container */}
+                                        <div className="flex-1 relative bg-gray-100 overflow-hidden flex items-center justify-center p-4">
+                                            {isLoading && (
+                                                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-30 flex flex-col items-center justify-center animate-fadeIn">
+                                                    <div className="w-12 h-12 rounded-full border-4 border-indigo-100 border-t-indigo-600 animate-spin mb-4"></div>
+                                                    <h4 className="font-bold text-gray-900">Merender Desain AI...</h4>
+                                                </div>
+                                            )}
+
+                                            {/* PRATINJAU VISUAL */}
+                                            {editorTab === 'preview' && (
+                                                <div className={`h-full transition-all duration-300 shadow-xl overflow-hidden \${
+                                                    previewMode === 'mobile' ? 'w-[375px] rounded-[40px] border-[6px] border-gray-900' : 
+                                                    previewMode === 'tablet' ? 'w-[768px] rounded-[30px] border-[6px] border-gray-900' : 'w-full rounded-xl border border-gray-300'
+                                                }`}>
+                                                    <iframe srcDoc={generatedCode} className="w-full h-full border-none bg-white" sandbox="allow-scripts allow-same-origin"/>
+                                                </div>
+                                            )}
+
+                                            {/* EDITOR KODE (VS Code Style / Dark Mode untuk kontras) */}
+                                            {editorTab === 'code' && (
+                                                <div className="w-full h-full bg-[#0f172a] rounded-xl shadow-inner border border-gray-800 flex flex-col overflow-hidden animate-fadeIn">
+                                                    <div className="bg-[#1e293b] px-4 py-2 border-b border-gray-700 flex justify-between items-center">
+                                                        <span className="text-gray-400 text-xs font-mono">index.html</span>
+                                                        <button onClick={() => {
+                                                            navigator.clipboard.writeText(generatedCode);
+                                                            showToast('Kode disalin!');
+                                                        }} className="text-xs text-indigo-400 hover:text-indigo-300 font-mono">Salin Kode</button>
+                                                    </div>
+                                                    <textarea
+                                                        value={generatedCode}
+                                                        onChange={(e) => {
+                                                            setGeneratedCode(e.target.value);
+                                                            const hist = history.slice(0, historyIndex + 1);
+                                                            hist.push(e.target.value);
+                                                            setHistory(hist);
+                                                            setHistoryIndex(hist.length - 1);
+                                                        }}
+                                                        className="w-full h-full bg-transparent text-gray-300 p-4 font-mono text-sm resize-none outline-none dark-scrollbar leading-relaxed"
+                                                        spellCheck={false}
+                                                    />
                                                 </div>
                                             )}
                                         </div>
-                                    </div>
-                                </aside>
+                                    </main>
+                                </React.Fragment>
+                            )}
 
-                                {/* Code Editor Panel */}
-                                {showCodeView && (
-                                    <section className={`w-full md:w-[390px] flex-shrink-0 bg-slate-900 border-r border-slate-950 flex-col \${
-                                        activeTab === 'code' ? 'flex' : 'hidden md:flex'
-                                    }`}>
-                                        <div className="p-4 bg-slate-950 border-b border-slate-900 flex items-center justify-between flex-shrink-0">
-                                            <span className="text-xs font-black uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                                                <svg className="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                                                KODE HTML & CSS
-                                            </span>
-                                            <div className="flex items-center gap-1.5">
-                                                <button 
-                                                    onClick={handleCopyCode}
-                                                    className="p-1.5 text-slate-400 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg transition"
-                                                >
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                                                </button>
-                                                <span className="text-[9px] font-black uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md">Live Sync</span>
+                            {/* View Mode: BROWSER / SITUS LIVE */}
+                            {viewMode === 'browser' && (
+                                <main className="flex-1 bg-white rounded-2xl border border-gray-200 shadow-sm flex flex-col overflow-hidden animate-fadeIn">
+                                    <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center gap-4">
+                                        <div className="flex gap-2">
+                                            <span className="w-3 h-3 rounded-full bg-red-400"></span>
+                                            <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
+                                            <span className="w-3 h-3 rounded-full bg-green-400"></span>
+                                        </div>
+                                        <button onClick={() => setViewMode('editor')} className="p-1.5 text-gray-500 hover:text-gray-900 bg-white rounded shadow-sm border border-gray-200">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                                        </button>
+                                        <div className="flex-1 bg-white border border-gray-200 rounded-lg px-4 py-2 flex items-center justify-between shadow-inner">
+                                            <div className="flex items-center gap-2 text-sm text-gray-600 w-full">
+                                                <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                                <span>https://</span>
+                                                <input value={browserAddress.replace('https://', '')} onChange={(e) => setBrowserAddress(`https://\${e.target.value}`)} className="flex-1 outline-none text-gray-900 font-medium" />
                                             </div>
-                                        </div>
-
-                                        <div className="flex-1 p-3 bg-slate-950 font-mono text-xs relative overflow-hidden">
-                                            <textarea
-                                                value={generatedCode}
-                                                onChange={(e) => {
-                                                    setGeneratedCode(e.target.value);
-                                                    const updatedHistory = history.slice(0, historyIndex + 1);
-                                                    updatedHistory.push(e.target.value);
-                                                    setHistory(updatedHistory);
-                                                    setHistoryIndex(updatedHistory.length - 1);
-                                                }}
-                                                className="w-full h-full bg-transparent text-slate-300 resize-none outline-none overflow-y-auto leading-relaxed custom-scrollbar"
-                                                style={{ tabSize: 4 }}
-                                                spellCheck={false}
-                                            />
-                                        </div>
-                                    </section>
-                                )}
-
-                                {/* Main Canvas Preview */}
-                                <main className={`flex-1 bg-slate-100 flex flex-col overflow-hidden \${
-                                    activeTab === 'preview' ? 'flex' : 'hidden md:flex'
-                                }`}>
-                                    <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between flex-shrink-0 shadow-sm z-10">
-                                        <div className="flex items-center gap-2">
-                                            <span className={`w-2 h-2 rounded-full \${isLoading ? 'bg-amber-500 animate-ping' : 'bg-emerald-500'}`}></span>
-                                            <span className="text-xs font-bold text-slate-600">
-                                                {isLoading ? 'Menghasilkan komponen web...' : 'Visualisasi Pratinjau'}
-                                            </span>
-                                        </div>
-
-                                        {/* Device Preview Selectors */}
-                                        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
-                                            <button 
-                                                onClick={() => setPreviewMode('desktop')}
-                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition duration-150 \${previewMode === 'desktop' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
-                                            >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                                Desktop
-                                            </button>
-                                            <button 
-                                                onClick={() => setPreviewMode('tablet')}
-                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition duration-150 \${previewMode === 'tablet' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
-                                            >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                                                Tablet
-                                            </button>
-                                            <button 
-                                                onClick={() => setPreviewMode('mobile')}
-                                                className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition duration-150 \${previewMode === 'mobile' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
-                                            >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                                                Mobile
-                                            </button>
-                                        </div>
-
-                                        <div className="flex items-center gap-2">
-                                            <button 
-                                                onClick={handleDownloadCode}
-                                                className="p-1.5 text-slate-500 hover:text-indigo-600 bg-slate-50 border border-slate-200 rounded-xl transition flex items-center gap-1 text-xs font-bold px-2.5"
-                                            >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                                <span>Unduh HTML</span>
-                                            </button>
-                                            <button 
-                                                onClick={() => setShowCodeView(!showCodeView)}
-                                                className="hidden md:flex items-center gap-1 text-xs text-slate-500 hover:text-slate-900 font-bold transition"
-                                            >
-                                                <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                                {showCodeView ? 'Sembunyikan Kode' : 'Tampilkan Kode'}
-                                            </button>
                                         </div>
                                     </div>
-
-                                    {/* Bezel Rendering Area */}
-                                    <div className="flex-1 p-4 md:p-6 flex items-center justify-center overflow-auto relative">
-                                        {isLoading && (
-                                            <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-6 text-center animate-fadeIn">
-                                                <div className="w-14 h-14 rounded-full border-4 border-indigo-100 border-t-indigo-600 animate-spin mb-4 shadow-sm"></div>
-                                                <h4 className="text-sm font-black text-slate-800 mb-1">Menyusun Struktur Kreatif...</h4>
-                                                <p className="text-xs text-slate-400 max-w-xs leading-relaxed">Asisten AI sedang menyusun halaman, menyematkan visual interaktif, serta merender Tailwind CSS.</p>
-                                            </div>
-                                        )}
-
-                                        {previewMode === 'tablet' && (
-                                            <div className="w-[768px] h-[92%] bg-slate-950 rounded-[40px] p-5 shadow-2xl border-4 border-slate-800/80 flex flex-col relative animate-scaleIn">
-                                                <div className="absolute top-1.5 left-1/2 transform -translate-x-1/2 flex items-center gap-1.5">
-                                                    <span className="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
-                                                    <span className="w-10 h-1 rounded-full bg-slate-800"></span>
-                                                </div>
-                                                <div className="flex-1 bg-white rounded-2xl overflow-hidden relative border border-slate-900 shadow-inner">
-                                                    <iframe 
-                                                        title="Live Tablet View"
-                                                        srcDoc={generatedCode}
-                                                        className="w-full h-full border-none"
-                                                        sandbox="allow-scripts allow-same-origin"
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {previewMode === 'mobile' && (
-                                            <div className="w-[375px] h-[95%] bg-slate-950 rounded-[50px] p-4.5 shadow-2xl border-4 border-slate-800/90 flex flex-col relative animate-scaleIn">
-                                                <div className="absolute -left-1.5 top-20 w-1 h-12 bg-slate-800 rounded-r"></div>
-                                                <div className="absolute -left-1.5 top-36 w-1 h-12 bg-slate-800 rounded-r"></div>
-                                                <div className="absolute -right-1.5 top-28 w-1 h-16 bg-slate-800 rounded-l"></div>
-                                                
-                                                <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-28 h-5.5 bg-slate-900 rounded-full flex items-center justify-between px-3 z-10 border border-slate-800/40">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-blue-900/40"></span>
-                                                    <span className="w-9 h-1 rounded-full bg-slate-800"></span>
-                                                </div>
-                                                <div className="flex-1 bg-white rounded-[38px] overflow-hidden relative border border-slate-900 shadow-inner">
-                                                    <iframe 
-                                                        title="Live Mobile View"
-                                                        srcDoc={generatedCode}
-                                                        className="w-full h-full border-none"
-                                                        sandbox="allow-scripts allow-same-origin"
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {previewMode === 'desktop' && (
-                                            <div className="w-full h-full bg-white shadow-2xl rounded-2xl overflow-hidden border border-slate-200 flex flex-col animate-fadeIn">
-                                                <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 flex items-center gap-1.5 flex-shrink-0">
-                                                    <span className="w-2.5 h-2.5 rounded-full bg-slate-200"></span>
-                                                    <span className="w-2.5 h-2.5 rounded-full bg-slate-200"></span>
-                                                    <span className="w-2.5 h-2.5 rounded-full bg-slate-200"></span>
-                                                </div>
-                                                <div className="flex-1 bg-white relative">
-                                                    <iframe 
-                                                        title="Live Desktop View"
-                                                        srcDoc={generatedCode}
-                                                        className="w-full h-full border-none bg-white"
-                                                        sandbox="allow-scripts allow-same-origin"
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
+                                    <div className="flex-1 bg-white relative">
+                                        <iframe 
+                                            srcDoc={
+                                                publishedSites.find(s => s.subdomain === browserAddress.replace('https://', '').replace('.situskilat.id', ''))?.code || 
+                                                `<div style="padding:40px;text-align:center;font-family:sans-serif;"><h1>404</h1><p>Situs tidak ditemukan</p></div>`
+                                            }
+                                            className="w-full h-full border-none" sandbox="allow-scripts allow-same-origin"
+                                        />
                                     </div>
                                 </main>
-                            </>
+                            )}
+                        </div>
+
+                        {/* MODALS */}
+                        {showPublishModal && (
+                            <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+                                <div className="bg-white p-8 rounded-3xl max-w-md w-full shadow-2xl animate-scaleIn">
+                                    <h3 className="text-2xl font-extrabold text-gray-900 mb-2">Terbitkan Website</h3>
+                                    <p className="text-gray-500 text-sm mb-6">Miliki link kustom instan di server DNS kami.</p>
+
+                                    {publishStep === 0 ? (
+                                        <div className="space-y-5">
+                                            <div className="flex items-center bg-gray-50 border border-gray-200 focus-within:border-indigo-500 rounded-xl px-4 py-3.5 transition">
+                                                <input type="text" placeholder="nama-proyek" value={subdomainInput} onChange={(e) => setSubdomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} className="bg-transparent outline-none flex-1 font-bold text-gray-900 text-right pr-1"/>
+                                                <span className="text-indigo-600 font-bold">.situskilat.id</span>
+                                            </div>
+                                            <div className="flex gap-3">
+                                                <button onClick={() => setShowPublishModal(false)} className="flex-1 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold transition">Batal</button>
+                                                <button onClick={executePublishFlow} className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition shadow-lg shadow-indigo-600/30">Luncurkan</button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-6">
+                                            {publishStep < 4 ? (
+                                                <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin mx-auto mb-6"></div>
+                                            ) : (
+                                                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6"><svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg></div>
+                                            )}
+                                            <h4 className="font-bold text-gray-900 text-lg">{publishStep < 4 ? 'Menyiapkan DNS...' : 'Situs Mengudara!'}</h4>
+                                            {publishStep === 4 && (
+                                                <button onClick={() => { setShowPublishModal(false); setViewMode('browser'); setBrowserAddress(`https://\${subdomainInput}.situskilat.id`); }} className="mt-6 w-full py-3.5 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition">Buka Tautan</button>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
                         )}
 
-                        {viewMode === 'browser' && (
-                            <main className="flex-1 bg-slate-50 flex flex-col overflow-hidden animate-fadeIn">
-                                {/* Chrome Style Address Bar */}
-                                <div className="p-3 bg-white border-b border-slate-200 flex items-center gap-3 flex-shrink-0">
-                                    <div className="flex items-center gap-1.5 pr-2">
-                                        <span className="w-2.5 h-2.5 rounded-full bg-red-400 inline-block shadow-sm"></span>
-                                        <span className="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block shadow-sm"></span>
-                                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block shadow-sm"></span>
-                                    </div>
-
-                                    <button 
-                                        onClick={() => setViewMode('editor')}
-                                        className="p-1.5 hover:bg-slate-100 text-slate-500 hover:text-slate-900 rounded-xl transition"
-                                    >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                                    </button>
-
-                                    <div className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2 flex items-center justify-between text-xs text-slate-700 focus-within:border-indigo-400 focus-within:bg-white transition duration-200">
-                                        <div className="flex items-center gap-2 flex-1">
-                                            <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                                            <span className="font-semibold text-slate-400 select-none">https://</span>
-                                            <input 
-                                                type="text"
-                                                value={browserAddress.replace('https://', '')}
-                                                onChange={(e) => setBrowserAddress(`https://\${e.target.value}`)}
-                                                className="bg-transparent outline-none flex-1 font-semibold text-slate-800 font-mono"
-                                            />
+                        {showSettingsModal && (
+                            <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+                                <div className="bg-white p-8 rounded-3xl max-w-md w-full shadow-2xl animate-scaleIn">
+                                    <h3 className="text-2xl font-extrabold text-gray-900 mb-2">Pengaturan Server</h3>
+                                    <p className="text-gray-500 text-sm mb-6">Kelola koneksi Cloudflare Worker Anda.</p>
+                                    
+                                    <div className="space-y-5">
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Endpoint Worker URL</label>
+                                            <input type="text" value={workerUrl} onChange={(e) => setWorkerUrl(e.target.value)} className="mt-2 w-full bg-gray-50 border border-gray-200 focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-gray-900 outline-none transition" />
                                         </div>
-                                        <span className="text-[9px] font-black uppercase text-emerald-700 bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-md">SSL Aktif</span>
-                                    </div>
-                                    <div className="text-[10px] font-bold text-slate-400 hidden sm:block font-mono">
-                                        Situs Terbit DNS Router
+                                        <div className="p-4 bg-gray-50 rounded-xl text-xs text-gray-600">
+                                            Status: <strong className={serverStatus === 'connected' ? 'text-green-600' : 'text-red-600'}>{serverStatus === 'connected' ? 'Terhubung (Aman)' : 'Tidak Valid'}</strong>
+                                        </div>
+                                        <button onClick={() => { testWorkerConnection(); setShowSettingsModal(false); }} className="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-600/30">Simpan Konfigurasi</button>
                                     </div>
                                 </div>
-
-                                <div className="flex-1 bg-white relative">
-                                    <iframe 
-                                        title="Virtual Core Browser Sandbox"
-                                        srcDoc={getHtmlForBrowser()}
-                                        className="w-full h-full border-none bg-white"
-                                        sandbox="allow-scripts allow-same-origin"
-                                    />
-                                </div>
-                            </main>
+                            </div>
                         )}
                     </div>
-
-                    {/* Mobile Lower Actions */}
-                    <footer className="md:hidden flex bg-white border-t border-slate-200 py-3 flex-shrink-0 z-20 shadow-lg">
-                        <button
-                            onClick={() => { setViewMode('editor'); setActiveTab('ai'); setSidebarOpen(true); }}
-                            className={`flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-extrabold transition \${
-                                viewMode === 'editor' && activeTab === 'ai' ? 'text-indigo-600' : 'text-slate-400'
-                            }`}
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                            AI Pena
-                        </button>
-                        <button
-                            onClick={() => { setViewMode('editor'); setActiveTab('code'); setShowCodeView(true); }}
-                            className={`flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-extrabold transition \${
-                                viewMode === 'editor' && activeTab === 'code' ? 'text-indigo-600' : 'text-slate-400'
-                            }`}
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                            Kode HTML
-                        </button>
-                        <button
-                            onClick={() => { setViewMode('editor'); setActiveTab('preview'); }}
-                            className={`flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-extrabold transition \${
-                                viewMode === 'editor' && activeTab === 'preview' ? 'text-indigo-600' : 'text-slate-400'
-                            }`}
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            Pratinjau
-                        </button>
-                        <button
-                            onClick={() => {
-                                if (publishedSites.length === 0) {
-                                    showToast('Terbitkan situs Anda dulu!', 'info');
-                                    return;
-                                }
-                                setViewMode('browser');
-                                setBrowserAddress(`https://\${publishedSites[0].subdomain}.situskilat.id`);
-                            }}
-                            className={`flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-extrabold transition \${
-                                viewMode === 'browser' ? 'text-emerald-600' : 'text-slate-400'
-                            }`}
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                            Situs Live
-                        </button>
-                    </footer>
-
-                    {/* MODAL 1: GO LIVE (DNS DEPLOYMENT SERVICES) */}
-                    {showPublishModal && (
-                        <div className="fixed inset-0 bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
-                            <div className="bg-white border border-slate-200 p-6 rounded-3xl max-w-lg w-full shadow-2xl relative animate-scaleIn">
-                                <button 
-                                    onClick={() => { if (!isPublishing) setShowPublishModal(false); }}
-                                    className="absolute top-5 right-5 text-slate-400 hover:text-slate-800 transition"
-                                    disabled={isPublishing}
-                                >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                </button>
-
-                                <h3 className="text-xl font-extrabold text-slate-900 mb-1 flex items-center gap-2">
-                                    🚀 Terbitkan Website Instan
-                                </h3>
-                                <p className="text-xs text-slate-400 mb-6">Miliki link subdomain khusus dan luncurkan ke server DNS SitusKilat virtual gratis.</p>
-
-                                {publishStep === 0 && (
-                                    <div className="space-y-4">
-                                        <div className="space-y-1.5">
-                                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Pilih Alamat Subdomain Anda</label>
-                                            <div className="flex items-center bg-slate-100 border border-slate-200 focus-within:border-indigo-500 focus-within:bg-white rounded-xl px-4 py-3 transition duration-200">
-                                                <input 
-                                                    type="text"
-                                                    placeholder="nama-toko-saya"
-                                                    value={subdomainInput}
-                                                    onChange={(e) => setSubdomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                                                    className="bg-transparent text-sm text-slate-800 focus:outline-none flex-1 text-right pr-1 font-bold font-mono placeholder-slate-400"
-                                                />
-                                                <span className="text-sm font-black text-indigo-600 font-mono">.situskilat.id</span>
-                                            </div>
-                                            <span className="text-[10px] text-slate-400 leading-relaxed block">Gunakan kombinasi huruf kecil, angka, dan tanda hubung (-).</span>
-                                        </div>
-
-                                        <div className="flex gap-2.5 pt-2">
-                                            <button 
-                                                onClick={() => setShowPublishModal(false)}
-                                                className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition"
-                                            >
-                                                Batal
-                                            </button>
-                                            <button 
-                                                onClick={executePublishFlow}
-                                                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-indigo-600/15"
-                                            >
-                                                Luncurkan Sekarang
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {publishStep > 0 && publishStep < 4 && (
-                                    <div className="space-y-6">
-                                        <div className="grid grid-cols-3 gap-2">
-                                            <div className={`h-1.5 rounded-full transition duration-300 \${publishStep >= 1 ? 'bg-indigo-600' : 'bg-slate-200'}`}></div>
-                                            <div className={`h-1.5 rounded-full transition duration-300 \${publishStep >= 2 ? 'bg-indigo-600' : 'bg-slate-200'}`}></div>
-                                            <div className={`h-1.5 rounded-full transition duration-300 \${publishStep >= 3 ? 'bg-indigo-600' : 'bg-slate-200'}`}></div>
-                                        </div>
-
-                                        <div className="flex flex-col items-center justify-center py-4 text-center">
-                                            <div className="w-12 h-12 rounded-full border-4 border-indigo-100 border-t-indigo-600 animate-spin mb-4"></div>
-                                            <h4 className="text-sm font-bold text-slate-800 mb-1">Menyiapkan Alamat Subdomain...</h4>
-                                            <p className="text-xs text-slate-400 leading-relaxed">Server sedang mengunggah file index.html ke CDN Edge dan mendaftarkan SSL HTTPS secara aman.</p>
-                                        </div>
-
-                                        <div className="bg-slate-950 border border-slate-900 p-4 rounded-xl font-mono text-[10px] text-slate-400 space-y-1 h-36 overflow-y-auto">
-                                            {terminalLogs.map((log, index) => (
-                                                <div key={index} className="leading-relaxed text-slate-300">{log}</div>
-                                            ))}
-                                            <div className="w-2 h-4 bg-slate-400 animate-pulse inline-block"></div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {publishStep === 4 && (
-                                    <div className="space-y-6 text-center animate-fadeIn">
-                                        <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-lg">
-                                            <svg className="w-8 h-8 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" /></svg>
-                                        </div>
-
-                                        <div className="space-y-1.5">
-                                            <h4 className="text-lg font-bold text-slate-900">Website Sukses Diterbitkan!</h4>
-                                            <p className="text-xs text-slate-400">Website Anda telah mengudara secara instan dan dapat dibuka di browser virtual.</p>
-                                        </div>
-
-                                        <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
-                                            <span className="text-[9px] font-black text-slate-400 block mb-1 uppercase tracking-wider">Subdomain Terdaftar:</span>
-                                            <button 
-                                                onClick={() => navigateToVirtualUrl(`https://\${subdomainInput.toLowerCase()}.situskilat.id`)}
-                                                className="text-base font-black text-indigo-600 underline hover:text-indigo-800 break-all"
-                                            >
-                                                https://{subdomainInput.toLowerCase()}.situskilat.id
-                                            </button>
-                                        </div>
-
-                                        <div className="flex gap-2.5">
-                                            <button 
-                                                onClick={() => setShowPublishModal(false)}
-                                                className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition"
-                                            >
-                                                Tutup
-                                            </button>
-                                            <button 
-                                                onClick={() => navigateToVirtualUrl(`https://\${subdomainInput.toLowerCase()}.situskilat.id`)}
-                                                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-indigo-600/15"
-                                            >
-                                                Buka Browser Virtual
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* MODAL 2: GLOBAL SETTINGS & CLOUDFLARE WORKER CONFIG */}
-                    {showSettingsModal && (
-                        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
-                            <div className="bg-white border border-slate-200 p-6 rounded-3xl max-w-lg w-full shadow-2xl relative animate-slideUp">
-                                <button 
-                                    onClick={() => setShowSettingsModal(false)}
-                                    className="absolute top-5 right-5 text-slate-400 hover:text-slate-800 transition"
-                                >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                </button>
-
-                                <h3 className="text-lg font-black text-slate-900 mb-1.5 flex items-center gap-2">
-                                    🛡️ Konfigurasi Cloudflare Gateway
-                                </h3>
-                                <p className="text-xs text-slate-400 mb-4">Aplikasi Anda dikonfigurasi untuk memanggil Kunci API Gemini secara aman melalui gateway Cloudflare Workers pribadi Anda.</p>
-
-                                <div className="space-y-4">
-                                    <div className="space-y-2">
-                                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">URL Cloudflare Worker Aktif</label>
-                                        <div className="flex gap-2">
-                                            <input 
-                                                type="text"
-                                                placeholder="https://situskilat-auth-bridge.username.workers.dev"
-                                                value={workerUrl}
-                                                onChange={(e) => setWorkerUrl(e.target.value)}
-                                                className="flex-1 bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:ring-4 focus:ring-indigo-100 transition duration-200 font-mono"
-                                            />
-                                            <button
-                                                onClick={testWorkerConnection}
-                                                className="px-4 py-3 bg-slate-100 border border-slate-200 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
-                                            >
-                                                Uji Koneksi
-                                            </button>
-                                        </div>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <span className={`w-2 h-2 rounded-full \${serverStatus === 'connected' ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
-                                            <span className="text-[10px] text-slate-500">
-                                                Status Server: <span className="font-bold">{serverStatus === 'connected' ? 'Siap Merancang' : 'Terputus/Gagal'}</span>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-500 leading-relaxed space-y-2">
-                                        <span className="font-bold text-slate-800 block">Langkah-Langkah Singkat Pengamanan:</span>
-                                        <ol className="list-decimal pl-4.5 space-y-1.5 text-[11px] text-slate-400">
-                                            <li>Buat akun di platform Cloudflare Workers secara gratis.</li>
-                                            <li>Salin dan pasang script otorisasi CORS & domain locking yang sudah disiapkan.</li>
-                                            <li>Masukkan Kunci API Gemini Anda ke dalam menu Secrets (GEMINI_API_KEY) pada dashboard Cloudflare.</li>
-                                            <li>Tempelkan tautan Worker yang Anda peroleh ke kolom di atas.</li>
-                                        </ol>
-                                    </div>
-
-                                    <button 
-                                        onClick={() => {
-                                            testWorkerConnection();
-                                            setShowSettingsModal(false);
-                                        }}
-                                        className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-indigo-600/10"
-                                    >
-                                        Simpan & Tutup Konfigurasi
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                </React.Fragment>
             );
         }
 
-        // Render React Application
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
