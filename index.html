@@ -293,19 +293,58 @@
                     ? `KODE SAAT INI:\n${generatedCode}\n\nINSTRUKSI REVISI:\n${prompt}\nBerikan seluruh HTML secara lengkap.`
                     : prompt;
 
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${secureApiKey}`;
+                // DAFTAR MODEL FALLBACK: Mesin akan mencari otomatis model yang diizinkan oleh API Key Anda
+                const modelsToTry = [
+                    'gemini-2.5-flash',
+                    'gemini-2.5-flash-preview-09-2025',
+                    'gemini-2.0-flash',
+                    'gemini-1.5-flash',
+                    'gemini-1.5-pro',
+                    'gemini-1.5-flash-8b',
+                    'gemini-1.5-flash-001',
+                    'gemini-1.5-flash-002'
+                ];
+
+                let responseData = null;
+                let lastErrorMsg = "";
 
                 try {
-                    const data = await fetchWithBackoff(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: userPromptText }] }],
-                            systemInstruction: { parts: [{ text: systemPrompt }] }
-                        })
-                    });
+                    for (const modelName of modelsToTry) {
+                        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${secureApiKey}`;
+                        
+                        try {
+                            // Menggunakan fungsi fetchWithBackoff yang sudah ada untuk retry jika koneksi terputus
+                            const data = await fetchWithBackoff(url, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    contents: [{ parts: [{ text: userPromptText }] }],
+                                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                                })
+                            });
 
-                    let rawHtml = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                            // Jika berhasil, simpan data dan keluar dari loop pencarian
+                            responseData = data;
+                            console.log(`✅ Berhasil menggunakan model: ${modelName}`);
+                            break; 
+                        } catch (err) {
+                            lastErrorMsg = err.message;
+                            // Jika error 404 (Model tidak ada), lanjut ke model berikutnya di array
+                            if (lastErrorMsg.includes('404') || lastErrorMsg.includes('not found')) {
+                                console.warn(`Model ${modelName} ditolak Google (404). Lanjut ke model berikutnya...`);
+                                continue;
+                            }
+                            // Jika error lain (seperti 400 Kunci Salah atau kuota habis), langsung lempar error fatal
+                            throw err;
+                        }
+                    }
+
+                    // Jika setelah loop semua model tetap gagal ditemukan
+                    if (!responseData) {
+                        throw new Error(`Semua versi model AI tidak tersedia atau ditolak oleh Google. Coba periksa Kunci API Anda. Error: ${lastErrorMsg}`);
+                    }
+
+                    let rawHtml = responseData.candidates?.[0]?.content?.parts?.[0]?.text;
                     if (!rawHtml) throw new Error('Respons AI kosong atau diblokir filter keamanan Google.');
 
                     let cleanedCode = rawHtml.trim();
@@ -711,11 +750,23 @@
 
                                     {publishStep === 0 ? (
                                         <div className="space-y-5">
-                                            <div className="flex items-center bg-gray-50 border border-gray-200 focus-within:border-indigo-500 rounded-xl px-4 py-3.5 transition overflow-hidden">
-                                                <span className="text-gray-500 font-bold border-r border-gray-200 pr-2 mr-2 whitespace-nowrap hidden sm:inline-block">
-                                                    https://{getWorkerDomain()}/site/
-                                                </span>
-                                                <input type="text" placeholder="nama-proyek-web" value={subdomainInput} onChange={(e) => setSubdomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} className="bg-transparent outline-none flex-1 font-bold text-gray-900"/>
+                                            <div className="space-y-2">
+                                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Tentukan Nama Proyek Anda</label>
+                                                <div className="flex items-center bg-gray-50 border border-gray-200 focus-within:border-indigo-500 focus-within:bg-white rounded-xl px-4 py-3.5 transition duration-200">
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="contoh: bengkel-keren" 
+                                                        value={subdomainInput} 
+                                                        onChange={(e) => setSubdomainInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} 
+                                                        className="bg-transparent outline-none flex-1 font-bold text-gray-900 w-full"
+                                                    />
+                                                </div>
+                                                <div className="mt-2 p-3 bg-indigo-50/50 border border-indigo-100 rounded-lg">
+                                                    <span className="text-[10px] text-gray-500 block mb-1">Pratinjau Tautan Publik Anda:</span>
+                                                    <span className="text-xs font-mono font-bold text-indigo-700 break-all">
+                                                        https://{getWorkerDomain()}/site/{subdomainInput || 'nama-proyek'}
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="flex gap-3">
                                                 <button onClick={() => setShowPublishModal(false)} className="flex-1 py-3.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full font-bold transition">Batal</button>
