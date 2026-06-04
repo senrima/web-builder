@@ -117,13 +117,13 @@
                 <a href="#" class="hover:text-indigo-600">Beranda</a>
                 <a href="#" class="hover:text-indigo-600">Layanan</a>
             </nav>
-            <button class="bg-gray-900 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-gray-800 transition">Kontak</button>
+            <button class="bg-gray-900 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-gray-800 transition shadow-md">Kontak</button>
         </div>
     </header>
     <section class="py-24 px-6 text-center max-w-4xl mx-auto">
         <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-gray-900">Solusi Bisnis <span class="text-indigo-600">Tanpa Batas</span></h1>
-        <p class="text-lg text-gray-500 mb-10">Tingkatkan produktivitas perusahaan dengan layanan terbaik dan paling intuitif di dunia digital saat ini.</p>
-        <button class="bg-indigo-600 text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-indigo-600/30 hover:scale-105 transition transform">Pelajari Lebih Lanjut</button>
+        <p class="text-lg text-gray-500 mb-10 px-4 md:px-12">Tingkatkan produktivitas perusahaan dengan layanan terbaik dan paling intuitif di dunia digital saat ini.</p>
+        <button class="bg-indigo-600 text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-indigo-600/30 hover:-translate-y-1 transition transform">Pelajari Lebih Lanjut</button>
     </section>
 </body>
 </html>`;
@@ -132,8 +132,6 @@
             // States
             const [isDarkMode, setIsDarkMode] = useState(() => {
                 const saved = localStorage.getItem('situs_kilat_theme');
-                // Jika ada riwayat yang disimpan, gunakan riwayat tersebut. 
-                // Jika kosong (pengguna baru), jadikan Tema Gelap (true) sebagai bawaan/default.
                 if (saved !== null) {
                     return saved === 'dark';
                 }
@@ -314,7 +312,7 @@
             };
 
             // ==========================================
-            // PROSES GENERATE AI
+            // PROSES GENERATE AI DENGAN SUPER UI/UX PROMPT
             // ==========================================
             const handleAiGeneration = async (isEdit = false) => {
                 if (!prompt.trim()) return showToast('Masukkan instruksi web Anda!', 'error');
@@ -333,16 +331,22 @@
                     return;
                 }
 
+                // PROMPT KHUSUS UNTUK MEMAKSA ATURAN UI/UX (SPACING & BUTTONS)
                 const systemPrompt = isEdit
-                    ? `Anda adalah Senior Web Developer & UI/UX Designer profesional dengan 20 tahun pengalaman. Lakukan modifikasi kode HTML dengan kreativitas tingkat tinggi, presisi pixel-perfect, dan standar industri modern. Berikan HANYA kode HTML mentah yang utuh tanpa bungkus markdown. Pastikan fungsionalitas, script, dan CSS CDN tetap utuh. JANGAN gunakan source.unsplash.com, gunakan picsum.photos.`
-                    : `Anda adalah Senior Web Developer, UI/UX Expert, dan Art Director profesional dengan lebih dari 20 tahun pengalaman dalam merancang website kelas dunia. Anda sangat kreatif, inovatif, dan sangat memperhatikan detail estetika. Buatlah website (Single Page) yang mewah, elegan, dan modern menggunakan Tailwind CSS. 
-                      ATURAN WAJIB:
-                      1. Keluarkan HANYA kode HTML5 mandiri yang utuh tanpa penjelasan, tanpa komentar, dan tanpa bungkus markdown.
-                      2. Desain harus memiliki hierarki visual sempurna, whitespace yang lega, dan animasi transisi/hover yang halus.
-                      3. SELALU sertakan tag <meta name="viewport" content="width=device-width, initial-scale=1.0"> agar 100% responsif di mobile/tablet/desktop.
-                      4. WAJIB GUNAKAN GAMBAR AGAR WEB TERLIHAT HIDUP. Karena source.unsplash.com sudah mati, Anda WAJIB menggunakan layanan gambar 'https://picsum.photos' (contoh: https://picsum.photos/1200/800?random=1) atau menggunakan 'https://images.unsplash.com/photo-[id]'.
-                      5. Gunakan font "Poppins" dari Google Fonts.
-                      Buktikan pengalaman 20 tahun Anda melalui kualitas struktur kode yang rapi dan hasil seni desain web yang luar biasa.`;
+                    ? `Anda adalah Senior Web Developer & Ahli UI/UX dengan 20 tahun pengalaman. Revisi kode HTML ini untuk membuatnya JAUH lebih indah, modern, dan pixel-perfect.
+                      ATURAN REVISI MUTLAK:
+                      1. PERBAIKI SPACING: Teks JANGAN PERNAH menempel di pinggir layar! Selalu gunakan wrapper/container (contoh: <div class="max-w-7xl mx-auto px-6 md:px-12">) pada setiap section.
+                      2. PERBAIKI TOMBOL (BUTTON): Semua elemen yang berfungsi sebagai tombol WAJIB memiliki warna background (bg-*), teks kontras, padding tebal (px-6 py-3/px-8 py-4), rounded-full atau rounded-xl, dan hover effect. Jangan sampai tombol hanya terlihat seperti teks biasa!
+                      3. Berikan HANYA kode HTML mentah utuh. JANGAN gunakan source.unsplash.com, gunakan picsum.photos atau images.unsplash.com/photo-[id].`
+                      
+                    : `Anda adalah Senior Web Developer, UI/UX Expert, dan Art Director dengan 20 tahun pengalaman merancang UI/UX website kelas dunia. Buat website modern, mewah, elegan, dan SANGAT MEMPERHATIKAN UI/UX menggunakan Tailwind CSS.
+                      ATURAN WAJIB UI/UX TINGKAT TINGGI:
+                      1. SPACING & CONTAINER (SANGAT PENTING): Teks atau elemen apa pun JANGAN PERNAH menempel lurus di ujung layar! SELALU gunakan pembungkus utama pada setiap section seperti <div class="max-w-7xl mx-auto px-6 md:px-12 py-16"> agar ada ruang (whitespace) yang lega di kiri, kanan, atas, dan bawah layar.
+                      2. DESAIN TOMBOL (BUTTON) YANG JELAS: Semua call-to-action (CTA) WAJIB terlihat sangat jelas sebagai tombol yang bisa diklik. Gunakan padding besar (contoh: px-8 py-3.5), warna background tebal mencolok (contoh: bg-blue-600 text-white), border radius (rounded-full/rounded-xl), shadow (shadow-lg), dan efek transisi (hover:-translate-y-1 hover:shadow-xl transition-all). Jangan pernah membuat tombol yang menyatu/kalah dengan background.
+                      3. HIERARKI TIPOGRAFI: Judul harus besar, tebal, dan terbaca (text-4xl/5xl font-extrabold text-gray-900), sedangkan teks deskripsi lebih kecil, berjarak renggang, dan lebih abu-abu (text-lg text-gray-500 leading-relaxed). Pastikan kontras teks sangat baik.
+                      4. LAYOUT MODERN: Selalu gunakan Flexbox atau Grid (grid-cols-1 md:grid-cols-2 atau 3) untuk menyusun elemen dan kolom (card) secara profesional.
+                      5. GAMBAR/MEDIA: Wajib pakai gambar resolusi tinggi dari https://picsum.photos (contoh: https://picsum.photos/1200/800?random=1) untuk menghidupkan visual. JANGAN pakai source.unsplash.com.
+                      6. OUTPUT: Sertakan <meta name="viewport" content="width=device-width, initial-scale=1.0">. Gunakan font "Poppins". Berikan HANYA kode HTML5 mentah utuh tanpa markdown atau penjelasan.`;
 
                 const userPromptText = isEdit
                     ? `KODE SAAT INI:\n${generatedCode}\n\nINSTRUKSI REVISI:\n${prompt}\nBerikan seluruh HTML secara lengkap.`
@@ -408,6 +412,9 @@
                 if (!subdomainInput.trim()) return showToast('Ketikkan nama domain proyek!', 'error');
                 const cleanSubdomain = subdomainInput.toLowerCase().replace(/[^a-z0-9-]/g, '');
                 
+                // Cek apakah pengguna sedang mengedit situs miliknya sendiri
+                const isOwnSite = publishedSites.some(s => s.subdomain === cleanSubdomain);
+
                 setIsPublishing(true);
                 setPublishStep(1);
 
@@ -417,7 +424,8 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             subdomain: cleanSubdomain,
-                            html: generatedCode
+                            html: generatedCode,
+                            isUpdate: isOwnSite // Kirim status kepemilikan ke Server
                         })
                     });
 
@@ -439,6 +447,13 @@
                         localStorage.setItem('situs_kilat_published_sites', JSON.stringify(newSites));
                         showToast('Website Anda resmi Live!', 'success');
                     } else {
+                        // TANGKAP PENOLAKAN DARI SERVER JIKA NAMA SUDAH DIPAKAI
+                        if (result.error === 'already_exists') {
+                            setPublishStep(0);
+                            setIsPublishing(false);
+                            showToast(`Gagal: Nama '${cleanSubdomain}' sudah digunakan pengguna lain!`, 'error');
+                            return;
+                        }
                         throw new Error(result.error);
                     }
                 } catch (error) {
@@ -878,7 +893,12 @@
                                                 <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-6"><svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg></div>
                                             )}
                                             
-                                            <h4 className="font-bold text-gray-900 dark:text-white text-lg mb-2">{publishStep < 4 ? 'Mengunggah ke Database Pusat...' : 'Website Berhasil Mengudara!'}</h4>
+                                            {/* UI TEKS LOADING DINAMIS */}
+                                            <h4 className="font-bold text-gray-900 dark:text-white text-lg mb-2">
+                                                {publishStep === 1 ? 'Memeriksa Ketersediaan Nama...' : 
+                                                 publishStep < 4 ? 'Mengunggah ke Database Pusat...' : 
+                                                 'Website Berhasil Mengudara!'}
+                                            </h4>
                                             
                                             {publishStep === 4 && (
                                                 <div className="space-y-4">
